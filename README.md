@@ -15,3 +15,5 @@ Features:
 - Notifications/Reminders for payments?
 - Monthly Calendar View
 - Suggest other subscription options
+
+MVP: An app that provides users a service to view and manage their online subscriptions.
