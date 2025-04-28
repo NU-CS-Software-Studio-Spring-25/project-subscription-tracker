@@ -1,62 +1,76 @@
-/*
- * This is a manifest file that'll be compiled into application.css.
- *
- * With Propshaft, assets are served efficiently without preprocessing steps. You can still include
- * application-wide styles in this file, but keep in mind that CSS precedence will follow the standard
- * cascading order, meaning styles declared later in the document or manifest will override earlier ones,
- * depending on specificity.
- *
- * Consider organizing styles into separate files for maintainability.
- */
-/* Subscription card styles */
+/* Card styles */
 .subscription-card {
-    transition: transform 0.2s;
-    border: 1px solid #dee2e6;
-    margin-bottom: 1rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    background: white;
   }
   
-  .subscription-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  }
-  
-  /* Card content styles */
-  .subscription-card .card-body {
-    padding: 1.25rem;
-  }
-  
-  .subscription-card .card-title {
-    margin-bottom: 1rem;
-    color: #333;
-  }
-  
-  .subscription-card .card-text {
-    color: #666;
-    margin-bottom: 1rem;
-  }
-  
-  /* Button group styles */
-  .btn-group {
-    width: 100%;
+  /* Header styles */
+  .subscription-header {
+    display: flex;
     justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
   }
   
-  /* Modal styles */
-  .modal-dialog {
-    max-width: 500px;
+  .subscription-header h2 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 600;
   }
   
-  .modal-body {
-    padding: 1.5rem;
-  }
-  
-  /* Form styles */
-  .form-label {
+  /* Button styles */
+  .btn-add {
+    background-color: #007bff;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 6px;
+    border: none;
     font-weight: 500;
-    color: #333;
   }
   
-  .form-control:focus {
-    border-color: #80bdff;
-    box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+  .btn-group {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+  }
+  
+  .btn-edit {
+    background-color: #007bff;
+    color: white;
+    flex: 1;
+    border: none;
+    padding: 8px;
+    border-radius: 4px;
+  }
+  
+  .btn-delete {
+    background-color: #dc3545;
+    color: white;
+    flex: 1;
+    border: none;
+    padding: 8px;
+    border-radius: 4px;
+  }
+  
+  /* Subscription details */
+  .subscription-details {
+    margin: 15px 0;
+    color: #666;
+  }
+  
+  .subscription-details strong {
+    color: #333;
+    display: inline-block;
+    width: 120px;
+  }
+  
+  /* Container padding */
+  .container {
+    padding: 30px 15px;
+    max-width: 1200px;
+    margin: 0 auto;
   }
