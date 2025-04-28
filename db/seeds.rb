@@ -1,9 +1,16 @@
-# This file should ensure the existence of records required to run the application in every environment (production,
-# development, test). The code here should be idempotent so that it can be executed at any point in every environment.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
-#
-# Example:
-#
-#   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
-#     MovieGenre.find_or_create_by!(name: genre_name)
-#   end
+add_subscriptions = [
+  {:name => 'Office365', :price => '12',
+    :billing_cycle => 'Monthly', :next_payment_date => '25-May-2025'},
+  {:name => 'Prime', :price => '5.99',
+    :billing_cycle => 'Monthly', :next_payment_date => '25-Jun-2025'}, 
+  {:name => 'Rent', :price => '1000',
+    :billing_cycle => 'Yearly', :next_payment_date => '25-May-2026'},
+  {:name => 'Internet', :price => '35',
+    :billing_cycle => 'Monthly', :next_payment_date => '10-May-2025'},
+  {:name => 'Mobile', :price => '25',
+    :billing_cycle => 'Monthly', :next_payment_date => '18-May-2025'},
+]
+
+add_subscriptions.each do |subscription|
+    Subscription.create!(subscription)
+end
