@@ -8,3 +8,55 @@
  *
  * Consider organizing styles into separate files for maintainability.
  */
+/* Subscription card styles */
+.subscription-card {
+    transition: transform 0.2s;
+    border: 1px solid #dee2e6;
+    margin-bottom: 1rem;
+  }
+  
+  .subscription-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+  
+  /* Card content styles */
+  .subscription-card .card-body {
+    padding: 1.25rem;
+  }
+  
+  .subscription-card .card-title {
+    margin-bottom: 1rem;
+    color: #333;
+  }
+  
+  .subscription-card .card-text {
+    color: #666;
+    margin-bottom: 1rem;
+  }
+  
+  /* Button group styles */
+  .btn-group {
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  /* Modal styles */
+  .modal-dialog {
+    max-width: 500px;
+  }
+  
+  .modal-body {
+    padding: 1.5rem;
+  }
+  
+  /* Form styles */
+  .form-label {
+    font-weight: 500;
+    color: #333;
+  }
+  
+  .form-control:focus {
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+  }
