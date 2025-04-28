@@ -1,4 +1,4 @@
 Rails.application.routes.draw do
-  root "subscriptions#index"
   resources :subscriptions
+  root 'subscriptions#index'  # Makes the subscription page your homepage
 end
