@@ -1,0 +1,29 @@
+<div class="container py-4">
+  <h2>Subscriptions Summary</h2>
+
+  <p><strong>Total subscriptions:</strong>
+    <%= @total_count %>
+  </p>
+
+  <p><strong>Current subscription costs:</strong>
+    <%= number_to_currency(@total_price) %>
+  </p>
+
+  <p><strong>Monthly plans:</strong>
+    <%= @monthly_count %>
+  </p>
+
+  <p><strong>Yearly plans:</strong>
+    <%= @yearly_count %>
+  </p>
+
+  <p><strong>Next payment due:</strong>
+    <%= @next_payment ? @next_payment.strftime("%B %-d, %Y") : "—" %>
+  </p>
+
+  <p><strong>Amount due in next 30 days:</strong>
+    <%= number_to_currency(@due_30_days) %>
+  </p>
+
+  <%= link_to "← Back to Subscriptions", subscriptions_path, class: "btn btn-link mt-3" %>
+</div>

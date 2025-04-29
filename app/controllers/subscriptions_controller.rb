@@ -27,6 +27,17 @@ class SubscriptionsController < ApplicationController
       @subscription.destroy
       redirect_to subscriptions_path, notice: 'Subscription deleted successfully!'
     end
+
+    def summary
+      @total_count     = Subscription.count
+      @total_price     = Subscription.sum(:price)
+      @monthly_count   = Subscription.where(billing_cycle: "Monthly").count
+      @yearly_count    = Subscription.where(billing_cycle: "Yearly").count
+      @next_payment    = Subscription.order(:next_payment_date).first&.next_payment_date
+      @due_30_days     = Subscription
+                           .where(next_payment_date: Date.today..30.days.from_now)
+                           .sum(:price)
+    end    
   
     private
   

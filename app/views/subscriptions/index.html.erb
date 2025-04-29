@@ -6,12 +6,11 @@
       Add New Subscription
     </button>
   </div>
-  <!-- Summary -->
-    <div class="row mb-4">
-      <h2>Summary</h2>
-      <p><strong>Total subscriptions:</strong> <%= @subscriptions.count %></p>
-      <p><strong>Total money spent:</strong> <%= number_to_currency(@subscriptions.sum(:price)) %></p>
-    </div>
+  <div class="py-4">
+    <%= link_to "Summary",
+            summary_subscriptions_path,
+            class: "btn btn-outline-secondary ms-2" %>
+  </div>
   <!-- Subscriptions Grid -->
   <div class="row">
     <% @subscriptions.each do |subscription| %>
