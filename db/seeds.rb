@@ -13,7 +13,7 @@ add_subscriptions = [
     :billing_cycle => 'Monthly', :next_payment_date => '28-May-2025'},
   {:name => 'PS Plus', :price => '12',
     :billing_cycle => 'Monthly', :next_payment_date => '29-May-2025'}, 
-  {:name => 'Magazine Subscription' :price => '15',
+  {:name => 'Magazine Subscription', :price => '15',
     :billing_cycle => 'Yearly', :next_payment_date => '22-May-2026'},
   {:name => 'Google Storage', :price => '2',
     :billing_cycle => 'Monthly', :next_payment_date => '2-May-2025'},
