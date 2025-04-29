@@ -1,29 +1,54 @@
-<div class="container py-4">
-  <h2>Subscriptions Summary</h2>
+<!-- app/views/subscriptions/summary.html.erb -->
+<div class="container py-4 summary-card">
+  <div class="card">
+    <div class="card-body">
+      <h2 class="card-title mb-4">Subscriptions Summary</h2>
 
-  <p><strong>Total subscriptions:</strong>
-    <%= @total_count %>
-  </p>
+      <div class="row g-3 mb-3">
+        <div class="col-md-6">
+          <h6 class="text-muted">Next payment due</h6>
+          <p>
+            <%= @next_payment ? @next_payment.strftime("%B %-d, %Y") : "—" %>
+          </p>
+        </div>
+        <div class="col-md-6">
+          <h6 class="text-muted">Amount due in next 30 days</h6>
+          <p><%= number_to_currency(@due_30_days) %></p>
+        </div>
+      </div>
 
-  <p><strong>Current subscription costs:</strong>
-    <%= number_to_currency(@total_price) %>
-  </p>
+      <hr>
+      <div class="row row-cols-1 row-cols-md-2 g-3 mb-4">
+        <div class="col">
+          <div class="stat-box d-flex flex-column justify-content-center">
+            <h5>Total subscriptions</h5>
+            <p><%= @total_count %></p>
+          </div>
+        </div>
+        <div class="col">
+          <div class="stat-box d-flex flex-column justify-content-center">
+            <h5>Current subscription costs</h5>
+            <p><%= number_to_currency(@total_price) %></p>
+          </div>
+        </div>
+        <div class="col">
+          <div class="stat-box d-flex flex-column justify-content-center">
+            <h5>Monthly plans</h5>
+            <p><%= @monthly_count %></p>
+          </div>
+        </div>
+        <div class="col">
+          <div class="stat-box d-flex flex-column justify-content-center">
+            <h5>Yearly plans</h5>
+            <p><%= @yearly_count %></p>
+          </div>
+        </div>
+      </div>
 
-  <p><strong>Monthly plans:</strong>
-    <%= @monthly_count %>
-  </p>
 
-  <p><strong>Yearly plans:</strong>
-    <%= @yearly_count %>
-  </p>
-
-  <p><strong>Next payment due:</strong>
-    <%= @next_payment ? @next_payment.strftime("%B %-d, %Y") : "—" %>
-  </p>
-
-  <p><strong>Amount due in next 30 days:</strong>
-    <%= number_to_currency(@due_30_days) %>
-  </p>
-
-  <%= link_to "← Back to Subscriptions", subscriptions_path, class: "btn btn-link mt-3" %>
+      <%= link_to "← Back to Subscriptions",
+                  subscriptions_path,
+                  class: "btn btn-primary" %>
+    </div>
+  </div>
 </div>
