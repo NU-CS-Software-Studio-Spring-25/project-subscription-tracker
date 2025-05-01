@@ -18,12 +18,4 @@ Features:
 
 MVP: An app that provides users a service to view and manage their online subscriptions.
 
-Team Members:
-
-Abdulrahman Alrasheed
-
-Mukhtar Handulle
-
-Jacob Liang
-
-Sofian Rahhali
+Team Members: Abdulrahman Alrasheed, Mukhtar Handulle, Jacob Liang, Sofian Rahhali
