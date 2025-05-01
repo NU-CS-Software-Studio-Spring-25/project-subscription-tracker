@@ -22,3 +22,11 @@ Team Members: Abdulrahman Alrasheed, Mukhtar Handulle, Jacob Liang, Sofian Rahha
 
 Heroku: https://subscription-tracker-397-b31f84e4124e.herokuapp.com/
 
+
+
+Next Steps:
+-Make the UI prettier, integrate dashboard
+-add login and authentication
+-calender view
+-ranking subscriptions
+-
