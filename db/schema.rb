@@ -10,7 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_04_28_225346) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_12_225636) do
+  create_table "categories", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "subscriptions", force: :cascade do |t|
     t.string "name"
     t.decimal "price"
@@ -19,5 +25,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_28_225346) do
     t.text "notes"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "category_id"
+    t.index ["category_id"], name: "index_subscriptions_on_category_id"
   end
+
+  add_foreign_key "subscriptions", "categories"
 end
