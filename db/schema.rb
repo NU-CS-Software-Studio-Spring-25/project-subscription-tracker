@@ -12,6 +12,7 @@
 
 ActiveRecord::Schema[8.0].define(version: 2025_04_28_225346) do
   create_table "subscriptions", force: :cascade do |t|
+    t.integer "id"
     t.string "name"
     t.decimal "price"
     t.string "billing_cycle"
