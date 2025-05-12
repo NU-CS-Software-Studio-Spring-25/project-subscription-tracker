@@ -2,10 +2,10 @@
 
 Personal Subscription Tracker
 
-Problem:
+## Problem:
 - As people subscribe to more and more subscriptions, it becomes harder to keep track of everything they are paying for.
 
-Features:
+## Features:
 - Spending dashboard
     - Money spent per month
     - List of monthly subscriptions, yearly subscriptions
@@ -17,3 +17,18 @@ Features:
 - Suggest other subscription options
 
 MVP: An app that provides users a service to view and manage their online subscriptions.
+
+## Team Members
+Abdulrahman Alrasheed, Mukhtar Handulle, Jacob Liang, Sofian Rahhali
+
+## Heroku Link
+https://subscription-tracker-397-b31f84e4124e.herokuapp.com/
+
+
+
+Next Steps:
+-Make the UI prettier, integrate dashboard
+-add login and authentication
+-calender view
+-ranking subscriptions
+-
