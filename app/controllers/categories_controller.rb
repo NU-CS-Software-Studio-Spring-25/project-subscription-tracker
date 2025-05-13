@@ -1,18 +1,15 @@
 class CategoriesController < ApplicationController
   def index
     @categories = Category.alphabetical
-    monthly = Category
+    @monthly_totals = Category
       .joins(:subscriptions)
-      .where(subscriptions: { billing_cycle: "monthly" })
+      .where(subscriptions: { billing_cycle: "Monthly" })
       .group(:name)
       .sum("subscriptions.price")
-    yearly  = Category
+    @yearly_totals  = Category
       .joins(:subscriptions)
-      .where(subscriptions: { billing_cycle: "yearly" })
+      .where(subscriptions: { billing_cycle: "Yearly" })
       .group(:name)
       .sum("subscriptions.price")
-
-    @monthly_totals = monthly
-    @yearly_totals = yearly
   end
 end
