@@ -1,0 +1,42 @@
+<!-- app/views/categories/budgeting.html.erb -->
+<div class="container my-5">
+  <h1 class="mb-4">Budget Overview</h1>
+
+  <%# Static budget targets; replace or move to controller if desired %>
+  <% budgets = {
+       'Entertainment'      => 500.00,
+       'Utilities'          => 300.00,
+       'Streaming Services' => 100.00,
+       'Software'           => 200.00,
+       'Education'          => 150.00
+     } %>
+
+  <%# Actual money spent pulled from DB via @category_totals (keys are category names) %>
+  <% spent = @category_totals || {} %>
+
+  <% budgets.each do |category_name, budget_amount| %>
+    <% actual = spent[category_name] || 0 %>
+    <% percent = budget_amount.positive? ? (actual.to_f / budget_amount * 100).round(1) : 0 %>
+
+    <div class="card mb-3 shadow-sm">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <h5 class="card-title mb-0"><%= category_name %></h5>
+          <span class="fw-bold"><%= number_to_currency(actual) %> / <%= number_to_currency(budget_amount) %></span>
+        </div>
+        <div class="progress" style="height: 1.5rem;">
+          <div
+            class="progress-bar <%= percent > 100 ? 'bg-danger' : 'bg-primary' %>"
+            role="progressbar"
+            style="width: <%= percent %>%"
+            aria-valuenow="<%= percent %>"
+            aria-valuemin="0"
+            aria-valuemax="100"
+          >
+            <%= percent %>% used
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>

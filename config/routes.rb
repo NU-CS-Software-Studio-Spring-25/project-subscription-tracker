@@ -1,5 +1,9 @@
 Rails.application.routes.draw do
-  resources :categories, only: [:index]
+  resources :categories, only: [:index] do
+    collection do
+      get :budgeting
+    end
+  end
   resources :subscriptions, only: [:index, :create, :edit, :update, :destroy] do
     collection do
       get :summary   # → GET /subscriptions/summary
