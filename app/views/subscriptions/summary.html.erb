@@ -2,7 +2,12 @@
 <div class="container py-4 summary-card">
   <div class="card">
     <div class="card-body">
-      <h2 class="card-title mb-4">Subscriptions Summary</h2>
+      <h2 class="card-title mb-4">Subscriptions Insights dashboard</h2>
+
+      <!-- Chart.js Pie Chart -->
+      <div class="mb-4">
+        <canvas id="plansChart" width="400" height="200"></canvas>
+      </div>
 
       <div class="row g-3 mb-3">
         <div class="col-md-6">
@@ -45,10 +50,35 @@
         </div>
       </div>
 
-
       <%= link_to "← Back to Subscriptions",
                   subscriptions_path,
                   class: "btn btn-primary" %>
     </div>
   </div>
 </div>
+
+<!-- Chart.js Pie Chart Script -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    var ctx = document.getElementById('plansChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'pie',
+      data: {
+        labels: ['Monthly', 'Yearly'],
+        datasets: [{
+          data: [<%= @monthly_count %>, <%= @yearly_count %>],
+          backgroundColor: ['#36A2EB', '#FF6384']
+        }]
+      },
+      options: {
+        plugins: {
+          legend: {
+            display: true,
+            position: 'bottom'
+          }
+        }
+      }
+    });
+  });
+</script>
