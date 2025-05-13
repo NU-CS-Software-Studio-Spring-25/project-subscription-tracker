@@ -10,7 +10,7 @@ class CategoriesController < ApplicationController
       .joins(:subscriptions)
       .where(subscriptions: { billing_cycle: "yearly" })
       .group(:name)
-      .sum("subscriptions.price")]
+      .sum("subscriptions.price")
 
     @monthly_totals = monthly
     @yearly_totals = yearly
