@@ -1,2 +1,74 @@
-<h1>Categories#index</h1>
+<h1>All Categories</h1>
 <p>Find me in app/views/categories/index.html.erb</p>
+
+<div class="mb-4">
+  <button type="button"
+          class="btn btn-primary"
+          data-bs-toggle="modal"
+          data-bs-target="#priceChartModal">
+    Show Spend Pie Chart
+  </button>
+</div>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th># Subscriptions</th>
+      <th>Total Spent</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @categories.each do |category| %>
+      <tr>
+        <td><%= category.name %></td>
+        <td><%= category.subscriptions.count %></td>
+        <td>
+          <%= number_to_currency(category.subscriptions.sum(:price)) %>
+        </td>
+        <td>
+          <%= link_to "View", category_path(category),
+                      class: "btn btn-sm btn-outline-secondary" %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<!-- Modal -->
+<div class="modal fade" id="priceChartModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Spend by Category</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs mb-3" id="chartTab" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link active"
+                    id="monthly-tab"
+                    data-bs-toggle="tab"
+                    data-bs-target="#monthly-pane"
+                    type="button"
+                    role="tab">
+              Monthly
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link"
+                    id="yearly-tab"
+                    data-bs-toggle="tab"
+                    data-bs-target="#yearly-pane"
+                    type="button"
+                    role="tab">
+              Yearly
+            </button>
+          </li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content">

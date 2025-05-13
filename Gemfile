@@ -5,6 +5,9 @@ gem "rails", "~> 8.0.2"
 # The modern asset pipeline for Rails [https://github.com/rails/propshaft]
 gem "propshaft"
 
+#For graphing
+gem "chartkick"
+
 #sqlite for dev, postgreSQL for prod
 group :development, :test do
   gem "sqlite3", ">= 2.1"
