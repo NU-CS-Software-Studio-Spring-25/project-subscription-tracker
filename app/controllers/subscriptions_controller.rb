@@ -4,21 +4,21 @@ class SubscriptionsController < ApplicationController
   before_action :load_categories,    only: %i[index create update]
 
   def index
-    # eager-load category to avoid N+1
-    # @subscriptions = Subscription.includes(:category).all
-    load_paginated_subscriptions
-    
-    #Find subscriptions with billing date within next 7 days
-      upcoming = @subscriptions.select do |sub|
-        sub.next_payment_date.between?(Date.today,
-         Date.today + sub.notification_days_before.days)
-      end
+    #Find subscriptions with billing date within set date
+    all_subs = Subscription.includes(:category).order(created_at: :desc)
+    upcoming = all_subs.select do |sub|
+      sub.next_payment_date.between?(
+        Date.today,
+        Date.today + sub.notification_days_before.days)
+    end
   
     if upcoming.any?
       names = upcoming.map(&:name).to_sentence(two_words_connector: " and ")
       flash.now[:alert] = "Heads up! Your #{names} subscription#{'s' if upcoming.size > 1}
        #{upcoming.size > 1 ? 'are' : 'is'} due soon."      
     end
+
+    load_paginated_subscriptions
   end
 
   def create
