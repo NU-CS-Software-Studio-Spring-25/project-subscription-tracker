@@ -6,7 +6,7 @@ class SubscriptionsController < ApplicationController
   def index
     # eager-load category to avoid N+1
     #@subscriptions = Subscription.includes(:category).all
-    @pagy, @subscriptions = pagy(Subscription.includes(:category).order(created_at: :desc), items: 9)
+    load_paginated_subscriptions
   end
 
   def create
