@@ -51,6 +51,10 @@ class SubscriptionsController < ApplicationController
     @subscription = Subscription.find(params[:id])
   end
 
+  def load_paginated_subscriptions
+    @pagy, @subscriptions = pagy(Subscription.includes(:category).order(created_at: :desc), items: 9)
+  end
+
   def load_categories
     @categories = Category.alphabetical
   end
