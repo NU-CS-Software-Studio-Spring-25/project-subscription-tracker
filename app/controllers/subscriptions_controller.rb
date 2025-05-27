@@ -5,7 +5,8 @@ class SubscriptionsController < ApplicationController
 
   def index
     # eager-load category to avoid N+1
-    @subscriptions = Subscription.includes(:category).all
+    #@subscriptions = Subscription.includes(:category).all
+    @pagy, @subscriptions = pagy(Subscription.includes(:category).order(created_at: :desc), items: 9)
   end
 
   def create
@@ -13,7 +14,10 @@ class SubscriptionsController < ApplicationController
     if @subscription.save
       redirect_to subscriptions_path, notice: 'Subscription added successfully!'
     else
-      redirect_to subscriptions_path, alert: 'Error adding subscription.'
+      #redirect_to subscriptions_path, alert: 'Error adding subscription.'
+      @pagy, @subscriptions = pagy(Subscription.includes(:category).order(created_at: :desc), items: 9)
+      flash.now[:alert] = 'Error adding subscription.'
+      render :index, status: :unprocessable_entity
     end
   end
 
