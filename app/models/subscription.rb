@@ -1,4 +1,5 @@
 class Subscription < ApplicationRecord
+    belongs_to :user
     belongs_to :category, optional: true
 
     validates :name, presence: true
