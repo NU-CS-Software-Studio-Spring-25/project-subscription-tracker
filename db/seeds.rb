@@ -1,6 +1,11 @@
 Subscription.destroy_all
 Category.destroy_all
 
+user = User.find_by(email: "default@example.com")
+raise "Seed user not found!" unless user
+user.subscriptions.destroy_all
+
+Category.destroy_all
 other = Category.create!(name: "Other")
 entertainment = Category.create!(name: "Entertainment")
 housing = Category.create!(name: "Housing")
@@ -77,5 +82,7 @@ add_subscriptions = [
 ]
 
 add_subscriptions.each do |subscription|
-    Subscription.create!(subscription)
+    user.subscriptions.create!(subscription)
 end
+
+puts "Seeded #{user.subscriptions.count} subscriptions for #{user.email}"

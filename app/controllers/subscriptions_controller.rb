@@ -1,11 +1,12 @@
 # app/controllers/subscriptions_controller.rb
 class SubscriptionsController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_subscription, only: %i[update destroy]
   before_action :load_categories,    only: %i[index create update]
 
   def index
     #Find subscriptions with billing date within set date
-    all_subs = Subscription.includes(:category).order(created_at: :desc)
+    all_subs = current_user.subscriptions.includes(:category).order(created_at: :desc)
     upcoming = all_subs.select do |sub|
       sub.next_payment_date.between?(
         Date.today,
@@ -22,7 +23,7 @@ class SubscriptionsController < ApplicationController
   end
 
   def create
-    @subscription = Subscription.new(subscription_params)
+    @subscription = current_user.subscriptions.new(subscription_params)
     if @subscription.save
       redirect_to subscriptions_path, notice: 'Subscription added successfully!'
     else
@@ -47,19 +48,19 @@ class SubscriptionsController < ApplicationController
   end
 
   def summary
-    @total_count   = Subscription.count
-    @total_price   = Subscription.sum(:price)
-    @monthly_count = Subscription.where(billing_cycle: "Monthly").count
-    @yearly_count  = Subscription.where(billing_cycle: "Yearly").count
-    @next_payment  = Subscription.order(:next_payment_date).first&.next_payment_date
-    @due_7_days   = Subscription
+    @total_count   = current_user.subscriptions.count
+    @total_price   = current_user.subscriptions.sum(:price)
+    @monthly_count = current_user.subscriptions.where(billing_cycle: "Monthly").count
+    @yearly_count  = current_user.subscriptions.where(billing_cycle: "Yearly").count
+    @next_payment  = current_user.subscriptions.order(:next_payment_date).first&.next_payment_date
+    @due_7_days   = current_user.subscriptions
                        .where(next_payment_date: Date.today..7.days.from_now)
                        .sum(:price)
     # in summary action
-    @monthly_spend = Subscription.where(billing_cycle: "Monthly").sum(:price)
-    @yearly_spend  = Subscription.where(billing_cycle: "Yearly").sum(:price)
+    @monthly_spend = current_user.subscriptions.where(billing_cycle: "Monthly").sum(:price)
+    @yearly_spend  = current_user.subscriptions.where(billing_cycle: "Yearly").sum(:price)
     range = Date.today - 59.days..Date.today
-    @payments_by_day = Subscription
+    @payments_by_day = current_user.subscriptions
       .where(next_payment_date: range)
       .group(:next_payment_date)
       .count
@@ -69,11 +70,11 @@ class SubscriptionsController < ApplicationController
   private
 
   def set_subscription
-    @subscription = Subscription.find(params[:id])
+    @subscription = current_user.subscriptions.find(params[:id])
   end
 
   def load_paginated_subscriptions
-    @pagy, @subscriptions = pagy(Subscription.includes(:category).order(created_at: :desc), items: 9)
+    @pagy, @subscriptions = pagy(current_user.subscriptions.includes(:category).order(created_at: :desc), items: 9)
   end
 
   def load_categories
