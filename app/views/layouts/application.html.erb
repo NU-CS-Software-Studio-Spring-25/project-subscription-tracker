@@ -27,34 +27,23 @@
   </head>
 
 <body class="d-flex flex-column min-vh-100">
-  <!-- Login/Logout Links -->
-    <%= render "shared/header" %>
-    <div class="container mt-3">
-      <% if user_signed_in? %>
-        <span class="me-2">Logged in as <%= current_user.email %></span>
-        <%= button_to 'Logout', destroy_user_session_path, method: :delete, class: "btn btn-outline-danger btn-sm" %>
-      <% else %>
-        <%= link_to 'Login', new_user_session_path, class: "btn btn-outline-primary btn-sm me-2" %>
-        <%= link_to 'Sign up', new_user_registration_path, class: "btn btn-primary btn-sm" %>
-      <% end %>
-    </div>
+  <%= render "shared/header" %>
 
+  <main class="flex-fill">
     <!-- FLASH MESSAGES -->
     <% flash.each do |type, message| %>
-      <%# Map Rails flash types to Bootstrap alert classes %>
-      <% bs_class = case type.to_sym
-         when :notice then "success"
-         when :alert  then "danger"
-         else "info"
-         end %>
-      <div class="alert alert-<%= bs_class %> alert-dismissible fade show m-3" role="alert">
+      <% bs = { notice: "success", alert: "danger" }[type.to_sym] || "info" %>
+      <div class="alert alert-<%= bs %> alert-dismissible fade show m-3" role="alert">
         <%= message %>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
       </div>
     <% end %>
+
     <%= yield %>
-    <main class="flex-fill">    
-    <%= render "shared/footer" %>
+  </main>
+
+  <%= render "shared/footer" %>
+
 
 
     <!-- Add Bootstrap JavaScript -->
