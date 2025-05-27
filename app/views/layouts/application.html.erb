@@ -26,7 +26,7 @@
   </head>
 
   <body>
-    <!-- Login/Logout Links -->
+<!-- Login/Logout Links -->
     <div class="container mt-3">
       <% if user_signed_in? %>
         <span class="me-2">Logged in as <%= current_user.email %></span>
@@ -37,16 +37,19 @@
       <% end %>
     </div>
 
-    <!-- Flash Messages -->
-    <div class="container mt-2">
-      <% if notice %>
-        <div class="alert alert-success"><%= notice %></div>
-      <% end %>
-      <% if alert %>
-        <div class="alert alert-danger"><%= alert %></div>
-      <% end %>
-    </div>
-
+    <!-- FLASH MESSAGES -->
+    <% flash.each do |type, message| %>
+      <%# Map Rails flash types to Bootstrap alert classes %>
+      <% bs_class = case type.to_sym
+         when :notice then "success"
+         when :alert  then "danger"
+         else "info"
+         end %>
+      <div class="alert alert-<%= bs_class %> alert-dismissible fade show m-3" role="alert">
+        <%= message %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    <% end %>
     <%= yield %>
 
     <!-- Add Bootstrap JavaScript -->

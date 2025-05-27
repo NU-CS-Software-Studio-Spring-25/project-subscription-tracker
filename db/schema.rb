@@ -10,6 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+
 ActiveRecord::Schema[8.0].define(version: 2025_05_27_053944) do
   create_table "categories", force: :cascade do |t|
     t.string "name"
@@ -26,6 +27,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_27_053944) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "category_id"
+    t.integer "notification_days_before", default: 7, null: false
     t.index ["category_id"], name: "index_subscriptions_on_category_id"
   end
 
