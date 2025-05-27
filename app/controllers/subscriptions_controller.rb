@@ -15,7 +15,7 @@ class SubscriptionsController < ApplicationController
       redirect_to subscriptions_path, notice: 'Subscription added successfully!'
     else
       #redirect_to subscriptions_path, alert: 'Error adding subscription.'
-      @pagy, @subscriptions = pagy(Subscription.includes(:category).order(created_at: :desc), items: 9)
+      load_paginated_subscriptions
       flash.now[:alert] = 'Error adding subscription.'
       render :index, status: :unprocessable_entity
     end
