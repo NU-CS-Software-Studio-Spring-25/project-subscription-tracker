@@ -26,6 +26,21 @@
   </head>
 
   <body>
+    <!-- FLASH MESSAGES -->
+    <% flash.each do |type, message| %>
+      <%# Map Rails flash types to Bootstrap alert classes %>
+      <% bs_class = case type.to_sym
+         when :notice then "success"
+         when :alert  then "danger"
+         else "info"
+         end %>
+
+      <div class="alert alert-<%= bs_class %> alert-dismissible fade show m-3" role="alert">
+        <%= message %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    <% end %>
+    
     <%= yield %>
 
     <!-- Add Bootstrap JavaScript -->

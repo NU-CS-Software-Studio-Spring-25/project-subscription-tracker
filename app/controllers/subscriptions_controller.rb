@@ -6,6 +6,18 @@ class SubscriptionsController < ApplicationController
   def index
     # eager-load category to avoid N+1
     @subscriptions = Subscription.includes(:category).all
+    
+    #Find subscriptions with billing date within next 7 days
+      upcoming = @subscriptions.select do |sub|
+        sub.next_payment_date.between?(Date.today,
+         Date.today + sub.notification_days_before.days)
+      end
+  
+    if upcoming.any?
+      names = upcoming.map(&:name).to_sentence(two_words_connector: " and ")
+      flash.now[:alert] = "Heads up! Your #{names} subscription#{'s' if upcoming.size > 1}
+       #{upcoming.size > 1 ? 'are' : 'is'} due soon."      
+    end
   end
 
   def create
@@ -60,7 +72,8 @@ class SubscriptionsController < ApplicationController
         :billing_cycle,
         :next_payment_date,
         :notes,
-        :category_id      # ← allow category assignment
+        :category_id,      # ← allow category assignment
+        :notification_days_before,
       )
   end
 end

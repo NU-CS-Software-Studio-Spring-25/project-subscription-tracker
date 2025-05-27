@@ -70,6 +70,10 @@
                   <%= f.label :next_payment_date, class: "form-label" %>
                   <%= f.date_field :next_payment_date, class: "form-control", required: true %>
                 </div>
+                <div class="mb-3">
+                  <%= f.label :notification_days_before, "Notify me this many days before billing" %>
+                  <%= f.number_field :notification_days_before, min: 0, class: "form-control" %>
+                </div>
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -111,6 +115,10 @@
             <div class="mb-3">
               <%= f.label :next_payment_date, class: "form-label" %>
               <%= f.date_field :next_payment_date, class: "form-control", required: true %>
+            </div>
+            <div class="mb-3">
+              <%= f.label :notification_days_before, "Notify me this many days before billing" %>
+              <%= f.number_field :notification_days_before, min: 0, class: "form-control" %>
             </div>
           </div>
           <div class="modal-footer">
