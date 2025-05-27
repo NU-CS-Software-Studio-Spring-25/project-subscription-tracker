@@ -17,16 +17,18 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <link rel="icon" href="/icon.png" type="image/png">
-    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="icon" href="/icon.png" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">
+
 
     <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
 
-  <body>
-<!-- Login/Logout Links -->
+<body class="d-flex flex-column min-vh-100">
+  <!-- Login/Logout Links -->
+    <%= render "shared/header" %>
     <div class="container mt-3">
       <% if user_signed_in? %>
         <span class="me-2">Logged in as <%= current_user.email %></span>
@@ -51,6 +53,9 @@
       </div>
     <% end %>
     <%= yield %>
+    <main class="flex-fill">    
+    <%= render "shared/footer" %>
+
 
     <!-- Add Bootstrap JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
