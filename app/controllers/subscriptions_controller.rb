@@ -5,7 +5,7 @@ class SubscriptionsController < ApplicationController
 
   def index
     # eager-load category to avoid N+1
-    #@subscriptions = Subscription.includes(:category).all
+    # @subscriptions = Subscription.includes(:category).all
     load_paginated_subscriptions
     
     #Find subscriptions with billing date within next 7 days
