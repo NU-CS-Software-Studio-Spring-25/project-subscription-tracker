@@ -1,32 +1,70 @@
 <!-- app/views/shared/_header.html.erb -->
-<nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm mb-3">
-  <div class="container-fluid">
+<nav class="navbar navbar-light bg-light shadow-sm mb-3">
+  <div class="container-fluid d-flex px-5 justify-content-between align-items-center">
 
-    <!-- logo -->
-    <%= link_to root_path, class: "navbar-brand d-flex align-items-center px-4" do %>
-      <%= image_tag "logo.png",
-            alt: "Logo",
-            class: "me-2",
-            style: "height:3rem" %>
+    <!-- 1) Logo (always visible, left) -->
+    <%= link_to root_path, class: 'navbar-brand d-flex align-items-center' do %>
+      <%= image_tag 'logo.png', alt: 'Logo', style: 'height:3rem;' %>
     <% end %>
 
-    <!-- burger -->
-    <button class="navbar-toggler" type="button"
-            data-bs-toggle="collapse" data-bs-target="#mainNav">
+    <!-- 2) Desktop nav links (centered, hidden <lg) -->
+    <ul class="navbar-nav d-none d-lg-flex flex-lg-row gap-5">
+      <li class="nav-item">
+        <%= link_to 'Insights', '/subscriptions/summary',
+                    class: 'nav-link fw-bold text-black' %>
+      </li>
+      <li class="nav-item">
+        <%= link_to 'Categories', '/categories',
+                    class: 'nav-link fw-bold text-black' %>
+      </li>
+      <li class="nav-item">
+        <%= link_to 'Budgeting', '/categories/budgeting',
+                    class: 'nav-link fw-bold text-black' %>
+      </li>
+    </ul>
+
+    <!-- 3) Mobile burger (centered, shown <lg) -->
+    <button class="navbar-toggler d-lg-none" type="button"
+            data-bs-toggle="collapse" data-bs-target="#mobileNav"
+            aria-controls="mobileNav" aria-expanded="false"
+            aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <!-- links -->
-    <div class="collapse navbar-collapse" id="mainNav">
-      <ul class="navbar-nav ms-auto">
+    <!-- 4) Desktop Login/Signup (right, hidden <lg) -->
+    <div class="d-none d-lg-flex align-items-center gap-4">
+      <%= link_to 'Login',  '#', class: 'nav-link text-black fw-bold' %>
+      <%= link_to 'Signup', '#', class: 'nav-link text-black fw-bold' %>
+    </div>
+  </div>
+
+  <!-- Mobile-only collapsed menu -->
+  <div class="collapse d-lg-none" id="mobileNav">
+    <div class="container-fluid bg-light px-5 py-3">
+      <ul class="navbar-nav">
         <li class="nav-item">
-          <%= link_to "Dashboard", "#", class: "nav-link" %>
+          <%= link_to 'Insights', '/subscriptions/summary',
+                      class: 'nav-link fw-bolder text-black' %>
         </li>
         <li class="nav-item">
-          <%= link_to "Plans", "#", class: "nav-link" %>
+          <%= link_to 'Categories', '/categories',
+                      class: 'nav-link fw-bolder text-black' %>
+        </li>
+        <li class="nav-item">
+          <%= link_to 'Budgeting', '/categories/budgeting',
+                      class: 'nav-link fw-bolder text-black' %>
+        </li>
+        <li><hr class="my-2"></li>
+        <!-- Mobile Login/Signup -->
+        <li class="nav-item">
+          <%= link_to 'Login',  '#',
+                      class: 'nav-link fw-bolder text-black' %>
+        </li>
+        <li class="nav-item">
+          <%= link_to 'Signup', '#',
+                      class: 'nav-link fw-bolder text-black' %>
         </li>
       </ul>
     </div>
-
   </div>
 </nav>
