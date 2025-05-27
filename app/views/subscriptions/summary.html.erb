@@ -1,66 +1,65 @@
 <!-- app/views/subscriptions/summary.html.erb -->
-<div class="container py-4 summary-card">
-  <div class="card">
-    <div class="card-body">
-      <h2 class="card-title mb-4">Subscriptions Insights dashboard</h2>
+<div class="container py-4">
+  <h2 class="text-center mb-4">Subscriptions Insights Dashboard</h2>
 
-      <!-- Chart.js Pie Chart -->
-      <div class="mb-4">
-        <canvas id="plansChart" width="400" height="200"></canvas>
-      </div>
-
-      <div class="row g-3 mb-3">
+  <div class="row align-items-center">
+    <!-- LEFT: all the numbers -->
+    <div class="col-lg-6">
+      <!-- Next payment / 7-day due -->
+      <div class="row g-3 mb-4">
         <div class="col-md-6">
           <h6 class="text-muted">Next payment due</h6>
-          <p>
-            <%= @next_payment ? @next_payment.strftime("%B %-d, %Y") : "—" %>
-          </p>
+          <p><%= @next_payment&.strftime("%B %-d, %Y") || "—" %></p>
         </div>
         <div class="col-md-6">
-          <h6 class="text-muted">Amount due in next 30 days</h6>
-          <p><%= number_to_currency(@due_30_days) %></p>
+          <h6 class="text-muted">Amount due in next 7 days</h6>
+          <p><%= number_to_currency(@due_7_days) %></p>
         </div>
       </div>
 
-      <hr>
+      <!-- Key stats grid -->
       <div class="row row-cols-1 row-cols-md-2 g-3 mb-4">
         <div class="col">
-          <div class="stat-box d-flex flex-column justify-content-center">
-            <h5>Total subscriptions</h5>
-            <p><%= @total_count %></p>
+          <div class="p-3 border rounded text-center">
+            <h6>Monthly plans</h6>
+            <strong><%= @monthly_count %></strong>
           </div>
         </div>
         <div class="col">
-          <div class="stat-box d-flex flex-column justify-content-center">
-            <h5>Current subscription costs</h5>
-            <p><%= number_to_currency(@total_price) %></p>
+          <div class="p-3 border rounded text-center">
+            <h6>Yearly plans</h6>
+            <strong><%= @yearly_count %></strong>
           </div>
         </div>
         <div class="col">
-          <div class="stat-box d-flex flex-column justify-content-center">
-            <h5>Monthly plans</h5>
-            <p><%= @monthly_count %></p>
+          <div class="p-3 border rounded text-center">
+            <h6>Total monthly spend</h6>
+            <strong><%= number_to_currency(@monthly_spend) %></strong>
           </div>
         </div>
         <div class="col">
-          <div class="stat-box d-flex flex-column justify-content-center">
-            <h5>Yearly plans</h5>
-            <p><%= @yearly_count %></p>
+          <div class="p-3 border rounded text-center">
+            <h6>Total yearly spend</h6>
+            <strong><%= number_to_currency(@yearly_spend) %></strong>
           </div>
         </div>
       </div>
 
-      <%= link_to "← Back to Subscriptions",
-                  subscriptions_path,
-                  class: "btn btn-primary" %>
+    </div>
+
+    <!-- RIGHT: pie chart -->
+    <div class="col-lg-6 text-center">
+      <div style="max-width: 300px; margin: 0 auto;">
+        <canvas id="plansChart"></canvas>
+      </div>
     </div>
   </div>
 </div>
 
 <!-- Chart.js Pie Chart Script -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-  document.addEventListener("DOMContentLoaded", function() {
+<script data-turbo-eval="always">
+  document.addEventListener("turbo:load", function() {
     var ctx = document.getElementById('plansChart').getContext('2d');
     new Chart(ctx, {
       type: 'pie',
@@ -72,11 +71,9 @@
         }]
       },
       options: {
+        maintainAspectRatio: false,
         plugins: {
-          legend: {
-            display: true,
-            position: 'bottom'
-          }
+          legend: { display: true, position: 'bottom' }
         }
       }
     });

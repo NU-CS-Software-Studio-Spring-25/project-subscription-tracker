@@ -36,9 +36,18 @@ class SubscriptionsController < ApplicationController
     @monthly_count = Subscription.where(billing_cycle: "Monthly").count
     @yearly_count  = Subscription.where(billing_cycle: "Yearly").count
     @next_payment  = Subscription.order(:next_payment_date).first&.next_payment_date
-    @due_30_days   = Subscription
-                       .where(next_payment_date: Date.today..30.days.from_now)
+    @due_7_days   = Subscription
+                       .where(next_payment_date: Date.today..7.days.from_now)
                        .sum(:price)
+    # in summary action
+    @monthly_spend = Subscription.where(billing_cycle: "Monthly").sum(:price)
+    @yearly_spend  = Subscription.where(billing_cycle: "Yearly").sum(:price)
+    range = Date.today - 59.days..Date.today
+    @payments_by_day = Subscription
+      .where(next_payment_date: range)
+      .group(:next_payment_date)
+      .count
+
   end    
 
   private
