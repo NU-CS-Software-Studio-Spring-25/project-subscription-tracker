@@ -5,7 +5,8 @@ class SubscriptionsController < ApplicationController
 
   def index
     # eager-load category to avoid N+1
-    @subscriptions = Subscription.includes(:category).all
+    # @subscriptions = Subscription.includes(:category).all
+    load_paginated_subscriptions
     
     #Find subscriptions with billing date within next 7 days
       upcoming = @subscriptions.select do |sub|
@@ -25,7 +26,10 @@ class SubscriptionsController < ApplicationController
     if @subscription.save
       redirect_to subscriptions_path, notice: 'Subscription added successfully!'
     else
-      redirect_to subscriptions_path, alert: 'Error adding subscription.'
+      #redirect_to subscriptions_path, alert: 'Error adding subscription.'
+      load_paginated_subscriptions
+      flash.now[:alert] = 'Error adding subscription.'
+      render :index, status: :unprocessable_entity
     end
   end
 
@@ -57,6 +61,10 @@ class SubscriptionsController < ApplicationController
 
   def set_subscription
     @subscription = Subscription.find(params[:id])
+  end
+
+  def load_paginated_subscriptions
+    @pagy, @subscriptions = pagy(Subscription.includes(:category).order(created_at: :desc), items: 9)
   end
 
   def load_categories
