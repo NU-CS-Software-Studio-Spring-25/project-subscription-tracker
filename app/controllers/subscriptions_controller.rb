@@ -5,7 +5,20 @@ class SubscriptionsController < ApplicationController
 
   def index
     # eager-load category to avoid N+1
-    @subscriptions = Subscription.includes(:category).all
+    # @subscriptions = Subscription.includes(:category).all
+    load_paginated_subscriptions
+    
+    #Find subscriptions with billing date within next 7 days
+      upcoming = @subscriptions.select do |sub|
+        sub.next_payment_date.between?(Date.today,
+         Date.today + sub.notification_days_before.days)
+      end
+  
+    if upcoming.any?
+      names = upcoming.map(&:name).to_sentence(two_words_connector: " and ")
+      flash.now[:alert] = "Heads up! Your #{names} subscription#{'s' if upcoming.size > 1}
+       #{upcoming.size > 1 ? 'are' : 'is'} due soon."      
+    end
   end
 
   def create
@@ -13,7 +26,10 @@ class SubscriptionsController < ApplicationController
     if @subscription.save
       redirect_to subscriptions_path, notice: 'Subscription added successfully!'
     else
-      redirect_to subscriptions_path, alert: 'Error adding subscription.'
+      #redirect_to subscriptions_path, alert: 'Error adding subscription.'
+      load_paginated_subscriptions
+      flash.now[:alert] = 'Error adding subscription.'
+      render :index, status: :unprocessable_entity
     end
   end
 
@@ -56,6 +72,10 @@ class SubscriptionsController < ApplicationController
     @subscription = Subscription.find(params[:id])
   end
 
+  def load_paginated_subscriptions
+    @pagy, @subscriptions = pagy(Subscription.includes(:category).order(created_at: :desc), items: 9)
+  end
+
   def load_categories
     @categories = Category.alphabetical
   end
@@ -69,7 +89,8 @@ class SubscriptionsController < ApplicationController
         :billing_cycle,
         :next_payment_date,
         :notes,
-        :category_id      # ← allow category assignment
+        :category_id,      # ← allow category assignment
+        :notification_days_before,
       )
   end
 end

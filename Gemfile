@@ -8,6 +8,9 @@ gem "propshaft"
 #For graphing
 gem "chartkick"
 
+#login
+gem "devise"
+
 #sqlite for dev, postgreSQL for prod
 group :development, :test do
   gem "sqlite3", ">= 2.1"
@@ -73,3 +76,6 @@ group :test do
 end
 
 gem "tailwindcss-rails", "~> 4.2"
+
+# Pagination
+gem "pagy"

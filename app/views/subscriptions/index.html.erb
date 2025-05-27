@@ -12,6 +12,16 @@
     </div>
   </div>
 
+  <!-- Pagination Info -->
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <div class="text-muted">
+      Showing <%= @pagy.from %>-<%= @pagy.to %> of <%= @pagy.count %> subscriptions
+    </div>
+    <div class="text-muted">
+      Page <%= @pagy.page %> of <%= @pagy.pages %>
+    </div>
+  </div>
+
   <!-- Subscriptions Grid -->
   <div class="row">
     <% @subscriptions.each do |subscription| %>
@@ -70,6 +80,10 @@
                   <%= f.label :next_payment_date, class: "form-label" %>
                   <%= f.date_field :next_payment_date, class: "form-control", required: true %>
                 </div>
+                <div class="mb-3">
+                  <%= f.label :notification_days_before, "Notify me this many days before billing" %>
+                  <%= f.number_field :notification_days_before, min: 0, class: "form-control" %>
+                </div>
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -80,6 +94,11 @@
         </div>
       </div>
     <% end %>
+  </div>
+
+  <!-- Pagination Controls -->
+  <div class="d-flex justify-content-center mt-4">
+    <%== pagy_bootstrap_nav(@pagy) if @pagy.pages > 1 %>
   </div>
 
   <!-- Add Subscription Modal -->
@@ -112,6 +131,10 @@
               <%= f.label :next_payment_date, class: "form-label" %>
               <%= f.date_field :next_payment_date, class: "form-control", required: true %>
             </div>
+            <div class="mb-3">
+              <%= f.label :notification_days_before, "Notify me this many days before billing" %>
+              <%= f.number_field :notification_days_before, min: 0, class: "form-control" %>
+            </div>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -122,4 +145,3 @@
     </div>
   </div>
 </div>
-
