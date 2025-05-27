@@ -26,6 +26,27 @@
   </head>
 
   <body>
+    <!-- Login/Logout Links -->
+    <div class="container mt-3">
+      <% if user_signed_in? %>
+        <span class="me-2">Logged in as <%= current_user.email %></span>
+        <%= button_to 'Logout', destroy_user_session_path, method: :delete, class: "btn btn-outline-danger btn-sm" %>
+      <% else %>
+        <%= link_to 'Login', new_user_session_path, class: "btn btn-outline-primary btn-sm me-2" %>
+        <%= link_to 'Sign up', new_user_registration_path, class: "btn btn-primary btn-sm" %>
+      <% end %>
+    </div>
+
+    <!-- Flash Messages -->
+    <div class="container mt-2">
+      <% if notice %>
+        <div class="alert alert-success"><%= notice %></div>
+      <% end %>
+      <% if alert %>
+        <div class="alert alert-danger"><%= alert %></div>
+      <% end %>
+    </div>
+
     <%= yield %>
 
     <!-- Add Bootstrap JavaScript -->

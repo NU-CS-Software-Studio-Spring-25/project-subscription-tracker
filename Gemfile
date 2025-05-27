@@ -8,6 +8,9 @@ gem "propshaft"
 #For graphing
 gem "chartkick"
 
+#login
+gem "devise"
+
 #sqlite for dev, postgreSQL for prod
 group :development, :test do
   gem "sqlite3", ">= 2.1"
