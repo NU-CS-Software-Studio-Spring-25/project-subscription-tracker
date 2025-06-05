@@ -1,5 +1,5 @@
 <!-- app/views/shared/_header.html.erb -->
-<nav class="navbar navbar-light bg-light shadow-sm mb-3">
+<nav class="navbar navbar-light bg-light shadow mb-3">
   <div class="container-fluid d-flex px-5 align-items-center">
 
     <!-- Logo (always left) -->
@@ -11,15 +11,15 @@
     <ul class="navbar-nav d-none d-lg-flex flex-row gap-5 mx-auto">
       <li class="nav-item">
         <%= link_to 'Subscriptions', '/subscriptions',
-                    class: 'nav-link fw-bold text-black' %>
+                    class: 'nav-link fw-bold' %>
       </li>
       <li class="nav-item">
         <%= link_to 'Categories', '/categories',
-                    class: 'nav-link fw-bold text-black' %>
+                    class: 'nav-link fw-bold' %>
       </li>
       <li class="nav-item">
         <%= link_to 'Budgeting', '/categories/budgeting',
-                    class: 'nav-link fw-bold text-black' %>
+                    class: 'nav-link fw-bold' %>
       </li>
     </ul>
 
@@ -27,24 +27,24 @@
     <ul class="navbar-nav d-none d-lg-flex flex-row gap-3">
       <% if user_signed_in? %>
         <li class="nav-item">
-          <span class="nav-link text-black fw-bold">Logged in as <%= current_user.email %></span>
+          <span class="nav-link fw-bold">Logged in as <%= current_user.email %></span>
         </li>
         <li class="nav-item">
           <%= button_to 'Logout',
                       destroy_user_session_path,
                       method: :delete,
-                      class: 'nav-link fw-bold text-black' %>
+                      class: 'nav-link fw-bold' %>
         </li>
       <% else %>
         <li class="nav-item">
           <%= link_to 'Login',
                       new_user_session_path,
-                      class: 'nav-link fw-bold text-black' %>
+                      class: 'nav-link fw-bold' %>
         </li>
         <li class="nav-item">
           <%= link_to 'Sign up',
                       new_user_registration_path,
-                      class: 'nav-link fw-bold text-black' %>
+                      class: 'nav-link fw-bold' %>
         </li>
       <% end %>
     </ul>
@@ -65,38 +65,38 @@
         <!-- nav links -->
         <li class="nav-item">
           <%= link_to 'Subscriptions', '/subscriptions',
-                      class: 'nav-link fw-bolder text-black' %>
+                      class: 'nav-link fw-bolder' %>
         </li>
         <li class="nav-item">
           <%= link_to 'Categories', '/categories',
-                      class: 'nav-link fw-bolder text-black' %>
+                      class: 'nav-link fw-bolder' %>
         </li>
         <li class="nav-item">
           <%= link_to 'Budgeting', '/categories/budgeting',
-                      class: 'nav-link fw-bolder text-black' %>
+                      class: 'nav-link fw-bolder' %>
         </li>
         <li><hr class="my-2"></li>
         <!-- auth links -->
         <% if user_signed_in? %>
           <li class="nav-item">
-            <span class="nav-link fw-bolder text-black">Logged in as <%= current_user.email %></span>
+            <span class="nav-link fw-bolder">Logged in as <%= current_user.email %></span>
           </li>
           <li class="nav-item">
             <%= link_to 'Logout',
                         destroy_user_session_path,
                         method: :delete,
-                        class: 'nav-link fw-bolder text-black' %>
+                        class: 'nav-link fw-bolder' %>
           </li>
         <% else %>
           <li class="nav-item">
             <%= link_to 'Login',
                         new_user_session_path,
-                        class: 'nav-link fw-bolder text-black' %>
+                        class: 'nav-link fw-bolder' %>
           </li>
           <li class="nav-item">
             <%= link_to 'Sign up',
                         new_user_registration_path,
-                        class: 'nav-link fw-bolder text-black' %>
+                        class: 'nav-link fw-bolder' %>
           </li>
         <% end %>
       </ul>
