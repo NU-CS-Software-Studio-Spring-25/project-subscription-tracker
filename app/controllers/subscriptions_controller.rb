@@ -1,5 +1,6 @@
 # app/controllers/subscriptions_controller.rb
 class SubscriptionsController < ApplicationController
+  include ActionView::Helpers::NumberHelper
   before_action :authenticate_user!
   before_action :set_subscription, only: %i[update destroy]
   before_action :load_categories,    only: %i[index create update]
@@ -23,22 +24,22 @@ class SubscriptionsController < ApplicationController
   end
 
   def create
-    @subscription = current_user.subscriptions.new(subscription_params)
+    @subscription = current_user.subscriptions.build(subscription_params)
+    
     if @subscription.save
-      redirect_to subscriptions_path, notice: 'Subscription added successfully!'
+      check_budget_after_subscription(@subscription)
+      redirect_to subscriptions_path, notice: 'Subscription was successfully created.'
     else
-      #redirect_to subscriptions_path, alert: 'Error adding subscription.'
-      load_paginated_subscriptions
-      flash.now[:alert] = 'Error adding subscription.'
-      render :index, status: :unprocessable_entity
+      render :new
     end
   end
 
   def update
     if @subscription.update(subscription_params)
-      redirect_to subscriptions_path, notice: 'Subscription updated successfully!'
+      check_budget_after_subscription(@subscription)
+      redirect_to subscriptions_path, notice: 'Subscription was successfully updated.'
     else
-      redirect_to subscriptions_path, alert: 'Error updating subscription.'
+      render :edit
     end
   end
 
@@ -93,5 +94,20 @@ class SubscriptionsController < ApplicationController
         :category_id,      # ← allow category assignment
         :notification_days_before,
       )
+  end
+
+  def check_budget_after_subscription(subscription)
+    return unless subscription.category&.budgets&.exists?
+
+    category = subscription.category
+    budget = category.budgets.find_by(user: current_user)
+    return unless budget
+
+    # Calculate total spending for this category
+    total_spent = category.subscriptions.where(user: current_user).sum(:price)
+    
+    if total_spent > budget.amount
+      flash[:warning] = "⚠️ You're now over budget in #{category.name} category! Spent: #{number_to_currency(total_spent)}, Budget: #{number_to_currency(budget.amount)}"
+    end
   end
 end

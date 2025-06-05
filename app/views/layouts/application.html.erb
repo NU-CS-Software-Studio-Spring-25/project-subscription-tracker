@@ -31,16 +31,27 @@
     <%= render "shared/header" %>
   <% end %>
   <main class="flex-fill position-relative">
-    <!-- FLASH MESSAGES -->
-    <% flash.each do |type, message| %>
-      <% bs = { notice: "success", alert: "danger" }[type.to_sym] || "info" %>
-      <div class="alert alert-<%= bs %> alert-dismissible fade show
-             position-fixed top-0 start-50 translate-middle-x
-             w-50 mt-3 z-3" role="alert">
-        <%= message %>
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-      </div>
-    <% end %>
+    <style>
+      .alert-progress { height:4px; }
+      .alert-progress-bar { background-color: #808080; width:100%; height:100%; transition:width 5s linear; }
+    </style>
+    <!-- FLASH MESSAGES WRAPPER -->
+    <div class="position-fixed top-0 start-50 translate-middle-x w-50 mt-3" style="z-index: 1050;">
+      <% flash.each do |type, message| %>
+        <% bs = { notice: "success", alert: "danger", warning: "warning", danger: "danger" }[type.to_sym] || "info" %>
+
+        <!-- 🔄 updated alert markup -->
+        <div class="alert alert-<%= bs %> alert-dismissible fade show mb-2" role="alert">
+          <%= message %>
+          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+
+          <!-- shrinking bar -->
+          <div class="progress alert-progress mt-2">
+            <div class="progress-bar alert-progress-bar"></div>
+          </div>
+        </div>
+      <% end %>
+    </div>
 
     <%= yield %>
   </main>
@@ -48,8 +59,36 @@
     <%= render "shared/footer" %>
   <% end %>
 
+  <!-- Add Bootstrap JavaScript -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <script>
+    // initialise every flash (works with plain reloads *and* Turbo navigation)
+    function initFlashAlerts () {
+      document.querySelectorAll('.alert').forEach(alert => {
+        const bar = alert.querySelector('.alert-progress-bar');
+        if (!bar) return;
 
-    <!-- Add Bootstrap JavaScript -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  </body>
+        // ── 1. Make sure the bar *starts* full AFTER first paint ─────────────────
+        requestAnimationFrame(() => {         // paint #1
+          bar.style.width = '100%';           // ensure starting width
+          bar.offsetWidth;                    // force reflow
+          requestAnimationFrame(() => {       // paint #2
+            bar.style.width = '0%';           // animate to empty
+          });
+        });
+
+        // ── 2. Close the alert when the animation ends (5 s) ─────────────────────
+        setTimeout(() => {
+          bootstrap.Alert.getOrCreateInstance(alert).close();
+        }, 5000);
+      });
+    }
+
+    // first full-page load
+    document.addEventListener('DOMContentLoaded', initFlashAlerts);
+    // subsequent Turbo visits
+    document.addEventListener('turbo:load',       initFlashAlerts);
+  </script>
+</body>
 </html>

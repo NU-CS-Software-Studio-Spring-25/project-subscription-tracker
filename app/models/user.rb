@@ -5,4 +5,5 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
   #Users can havve many subscriptions
   has_many :subscriptions, dependent: :destroy
+  has_many :budgets, dependent: :destroy
 end
