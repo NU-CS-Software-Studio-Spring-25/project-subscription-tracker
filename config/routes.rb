@@ -4,6 +4,9 @@ Rails.application.routes.draw do
     collection do
       get :budgeting
     end
+    member do
+      patch :update_budget
+    end
   end
   resources :subscriptions, only: [:index, :create, :edit, :update, :destroy] do
     collection do
