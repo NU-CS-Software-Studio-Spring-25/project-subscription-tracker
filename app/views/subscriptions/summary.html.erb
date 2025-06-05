@@ -1,56 +1,60 @@
 <!-- app/views/subscriptions/summary.html.erb -->
-<div class="container py-4">
-  <h2 class="text-center mb-4">Subscriptions Insights Dashboard</h2>
+<div class="container summary-page">
+  <div class="card shadow">
+    <div class="card-body">
+      <h2 class="text-center">Subscriptions Insights Dashboard</h2>
 
-  <div class="row align-items-center">
-    <!-- LEFT: all the numbers -->
-    <div class="col-lg-6">
-      <!-- Next payment / 7-day due -->
-      <div class="row g-3 mb-4">
-        <div class="col-md-6">
-          <h6 class="text-muted">Next payment due</h6>
-          <p><%= @next_payment&.strftime("%B %-d, %Y") || "—" %></p>
-        </div>
-        <div class="col-md-6">
-          <h6 class="text-muted">Amount due in next 7 days</h6>
-          <p><%= number_to_currency(@due_7_days) %></p>
-        </div>
-      </div>
+      <div class="row align-items-center">
+        <!-- LEFT: all the numbers -->
+        <div class="col-lg-6">
+          <!-- Next payment / 7-day due -->
+          <div class="row g-3">
+            <div class="col-md-6">
+              <h6 class="text-muted">Next payment due</h6>
+              <p><%= @next_payment&.strftime("%B %-d, %Y") || "—" %></p>
+            </div>
+            <div class="col-md-6">
+              <h6 class="text-muted">Amount due in next 7 days</h6>
+              <p><%= number_to_currency(@due_7_days) %></p>
+            </div>
+          </div>
 
-      <!-- Key stats grid -->
-      <div class="row row-cols-1 row-cols-md-2 g-3 mb-4">
-        <div class="col">
-          <div class="p-3 border rounded text-center">
-            <h6>Monthly plans</h6>
-            <strong><%= @monthly_count %></strong>
+          <!-- Key stats grid -->
+          <div class="row row-cols-1 row-cols-md-2 g-3">
+            <div class="col">
+              <div class="p-3 border rounded text-center" style="border-color: var(--border) !important;">
+                <h6>Monthly plans</h6>
+                <strong class="text-primary-accessible"><%= @monthly_count %></strong>
+              </div>
+            </div>
+            <div class="col">
+              <div class="p-3 border rounded text-center" style="border-color: var(--border) !important;">
+                <h6>Yearly plans</h6>
+                <strong class="text-secondary-accessible"><%= @yearly_count %></strong>
+              </div>
+            </div>
+            <div class="col">
+              <div class="p-3 border rounded text-center" style="border-color: var(--border) !important;">
+                <h6>Total Monthly Costs</h6>
+                <strong class="text-primary-accessible"><%= number_to_currency(@monthly_spend) %></strong>
+              </div>
+            </div>
+            <div class="col">
+              <div class="p-3 border rounded text-center" style="border-color: var(--border) !important;">
+                <h6>Total Yearly Costs</h6>
+                <strong class="text-secondary-accessible"><%= number_to_currency(@yearly_spend) %></strong>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- RIGHT: pie chart -->
+        <div class="col-lg-6 text-center">
+          <div style="max-width: 300px; margin: 0 auto;">
+            <canvas id="plansChart" aria-label="Distribution of monthly vs yearly subscription plans"></canvas>
           </div>
         </div>
-        <div class="col">
-          <div class="p-3 border rounded text-center">
-            <h6>Yearly plans</h6>
-            <strong><%= @yearly_count %></strong>
-          </div>
-        </div>
-        <div class="col">
-          <div class="p-3 border rounded text-center">
-            <h6>Total monthly spend</h6>
-            <strong><%= number_to_currency(@monthly_spend) %></strong>
-          </div>
-        </div>
-        <div class="col">
-          <div class="p-3 border rounded text-center">
-            <h6>Total yearly spend</h6>
-            <strong><%= number_to_currency(@yearly_spend) %></strong>
-          </div>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- RIGHT: pie chart -->
-    <div class="col-lg-6 text-center">
-      <div style="max-width: 300px; margin: 0 auto;">
-        <canvas id="plansChart"></canvas>
       </div>
     </div>
   </div>
@@ -67,7 +71,7 @@
         labels: ['Monthly', 'Yearly'],
         datasets: [{
           data: [<%= @monthly_count %>, <%= @yearly_count %>],
-          backgroundColor: ['#36A2EB', '#FF6384']
+          backgroundColor: ['#158b82', '#2554a3'] // Using darker accessible versions
         }]
       },
       options: {
