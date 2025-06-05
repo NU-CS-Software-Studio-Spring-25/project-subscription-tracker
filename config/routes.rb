@@ -10,7 +10,7 @@ Rails.application.routes.draw do
       get :summary   # → GET /subscriptions/summary
     end
   end
-  root 'subscriptions#index'  # Makes the subscription page your homepage
+  root 'subscriptions#summary'  # Makes the subscription page your homepage
   
   match "/404", to: "errors#not_found", via: :all
   match "/500", to: "errors#internal_server_error", via: :all
