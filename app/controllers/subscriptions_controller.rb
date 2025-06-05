@@ -26,20 +26,36 @@ class SubscriptionsController < ApplicationController
   def create
     @subscription = current_user.subscriptions.build(subscription_params)
     
+    Rails.logger.info "Create request format: #{request.format}"
+    
     if @subscription.save
       check_budget_after_subscription(@subscription)
-      redirect_to subscriptions_path, notice: 'Subscription was successfully created.'
+      respond_to do |format|
+        format.html { redirect_to subscriptions_path, notice: 'Subscription was successfully created.' }
+        format.json { render json: { success: true, subscription: @subscription }, status: :created }
+      end
     else
-      render :new
+      respond_to do |format|
+        format.html { render :new }
+        format.json { render json: { errors: @subscription.errors.full_messages }, status: :unprocessable_entity }
+      end
     end
   end
 
   def update
+    Rails.logger.info "Update request format: #{request.format}"
+    
     if @subscription.update(subscription_params)
       check_budget_after_subscription(@subscription)
-      redirect_to subscriptions_path, notice: 'Subscription was successfully updated.'
+      respond_to do |format|
+        format.html { redirect_to subscriptions_path, notice: 'Subscription was successfully updated.' }
+        format.json { render json: { success: true, subscription: @subscription }, status: :ok }
+      end
     else
-      render :edit
+      respond_to do |format|
+        format.html { render :edit }
+        format.json { render json: { errors: @subscription.errors.full_messages }, status: :unprocessable_entity }
+      end
     end
   end
 
