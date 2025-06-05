@@ -27,13 +27,16 @@
   </head>
 
 <body class="d-flex flex-column min-vh-100">
-  <%= render "shared/header" %>
-
-  <main class="flex-fill">
+  <% unless devise_controller? %>
+    <%= render "shared/header" %>
+  <% end %>
+  <main class="flex-fill position-relative">
     <!-- FLASH MESSAGES -->
     <% flash.each do |type, message| %>
       <% bs = { notice: "success", alert: "danger" }[type.to_sym] || "info" %>
-      <div class="alert alert-<%= bs %> alert-dismissible fade show m-3" role="alert">
+      <div class="alert alert-<%= bs %> alert-dismissible fade show
+             position-fixed top-0 start-50 translate-middle-x
+             w-50 mt-3 z-3" role="alert">
         <%= message %>
         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
       </div>
@@ -41,9 +44,9 @@
 
     <%= yield %>
   </main>
-
-  <%= render "shared/footer" %>
-
+  <% unless devise_controller? %>
+    <%= render "shared/footer" %>
+  <% end %>
 
 
     <!-- Add Bootstrap JavaScript -->
