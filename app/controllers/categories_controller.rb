@@ -4,7 +4,12 @@ class CategoriesController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @categories = Category.alphabetical
+    # Only get categories that have subscriptions for the current user
+    @categories = Category
+      .joins(:subscriptions)
+      .where(subscriptions: { user: current_user })
+      .distinct
+      .alphabetical
 
     @monthly_totals = Category
       .joins(:subscriptions)
