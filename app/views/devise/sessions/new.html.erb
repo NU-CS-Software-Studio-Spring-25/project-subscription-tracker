@@ -2,45 +2,50 @@
   <div class="row g-0 h-100">
     <!-- Left column: centered form -->
     <div class="col-md-8 d-flex flex-column justify-content-center align-items-center p-4 h-100 overflow-auto">
-      <div >
-        <div class="text-center mb-4">
-          <%= image_tag 'logo.png',
-                        alt: 'Logo',
-                        class: 'img-fluid mb-3',
-                        style: 'height: 6rem;' %>
-        </div>
-
-        <div class="card shadow-sm">
+      <div class="container">
+        <div class="card shadow">
           <div class="card-body">
+            <div class="text-center mb-4">
+              <%= image_tag 'logo.png',
+                            alt: 'Logo',
+                            class: 'img-fluid mb-3',
+                            style: 'height: 6rem;' %>
+              <h2>Welcome Back</h2>
+            </div>
+
             <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-              <div class="mb-3">
-                <%= f.label :email, class: 'form-label' %>
-                <%= f.email_field :email,
-                      autofocus: true,
-                      autocomplete: "email",
-                      class: "form-control" %>
-              </div>
-
-              <div class="mb-3">
-                <%= f.label :password, class: 'form-label' %>
-                <%= f.password_field :password,
-                      autocomplete: "current-password",
-                      class: "form-control" %>
-              </div>
-
-              <% if devise_mapping.rememberable? %>
-                <div class="mb-3 form-check">
-                  <%= f.check_box :remember_me, class: "form-check-input" %>
-                  <%= f.label :remember_me, class: "form-check-label" %>
+              <div class="row g-3">
+                <div class="col-12">
+                  <%= f.label :email, class: 'form-label' %>
+                  <%= f.email_field :email,
+                        autofocus: true,
+                        autocomplete: "email",
+                        class: "form-control" %>
                 </div>
-              <% end %>
 
-              <div class="d-grid">
-                <%= f.submit "Log in", class: "btn btn-primary" %>
+                <div class="col-12">
+                  <%= f.label :password, class: 'form-label' %>
+                  <%= f.password_field :password,
+                        autocomplete: "current-password",
+                        class: "form-control" %>
+                </div>
+
+                <% if devise_mapping.rememberable? %>
+                  <div class="col-12">
+                    <div class="form-check">
+                      <%= f.check_box :remember_me, class: "form-check-input" %>
+                      <%= f.label :remember_me, class: "form-check-label" %>
+                    </div>
+                  </div>
+                <% end %>
+
+                <div class="col-12">
+                  <%= f.submit "Log in", class: "btn btn-primary w-100" %>
+                </div>
               </div>
             <% end %>
 
-            <div class="mt-3 text-center">
+            <div class="mt-4 text-center">
               <%= render "devise/shared/links" %>
             </div>
           </div>
