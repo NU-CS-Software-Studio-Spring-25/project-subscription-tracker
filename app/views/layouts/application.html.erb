@@ -29,10 +29,14 @@
   </head>
 
 <body class="d-flex flex-column min-vh-100" data-controller="keyboard-navigation">
+  <!-- Skip Navigation Link for Accessibility -->
+  <a href="#main-content" class="visually-hidden-focusable">Skip to main content</a>
+
   <% unless devise_controller? %>
     <%= render "shared/header" %>
   <% end %>
-  <main class="flex-fill position-relative">
+  <!-- Main content area with id for skip link -->
+  <main id="main-content" class="flex-fill position-relative">
     <style>
       .alert-progress { height:4px; }
       .alert-progress-bar { background-color: #808080; width:100%; height:100%; transition:width 5s linear; }
