@@ -26,23 +26,23 @@
           <div class="col-md-6 col-lg-4 mb-3">
             <div class="card h-100 shadow-sm">
               <div class="card-body p-3">
-                <h6 class="card-title mb-2"><%= category.name %></h6>
+                <h4 class="card-title mb-2"><%= category.name %></h4>
                 
                 <!-- Monthly section -->
                 <div class="d-flex justify-content-between align-items-center mb-1">
-                  <small class="text-muted">Monthly:</small>
+                  <medium class="text-muted">Monthly:</medium>
                   <div class="text-end">
-                    <span class="fw-bold text-primary-accessible"><%= number_to_currency(monthly_total) %></span>
-                    <small class="text-muted d-block"><%= pluralize(monthly_count, "sub") %></small>
+                    <span class="fw-bold text-primary-accessible fs-3"><%= number_to_currency(monthly_total) %></span>
+                    <medium class="text-muted d-block"><%= pluralize(monthly_count, "sub") %></medium>
                   </div>
                 </div>
                 
                 <!-- Yearly section -->
                 <div class="d-flex justify-content-between align-items-center">
-                  <small class="text-muted">Yearly:</small>
+                  <medium class="text-muted">Yearly:</medium>
                   <div class="text-end">
                     <span class="fw-bold text-secondary-accessible"><%= number_to_currency(yearly_total) %></span>
-                    <small class="text-muted d-block"><%= pluralize(yearly_count, "sub") %></small>
+                    <medium class="text-muted d-block"><%= pluralize(yearly_count, "sub") %></medium>
                   </div>
                 </div>
               </div>
