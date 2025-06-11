@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_06_05_055417) do
+ActiveRecord::Schema[8.0].define(version: 2025_06_11_050642) do
   create_table "budgets", force: :cascade do |t|
     t.integer "category_id", null: false
     t.decimal "amount", precision: 10, scale: 2, null: false
@@ -52,6 +52,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_05_055417) do
     t.datetime "remember_created_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "provider"
+    t.string "uid"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
