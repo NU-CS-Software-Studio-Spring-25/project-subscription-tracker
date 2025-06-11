@@ -79,3 +79,7 @@ gem "tailwindcss-rails", "~> 4.2"
 
 # Pagination
 gem "pagy"
+# For Google OAuth2 authentication
+gem "omniauth-google-oauth2"
+# Fix handshake between Rails and OmniAuth.
+gem 'omniauth-rails_csrf_protection'
