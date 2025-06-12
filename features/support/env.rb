@@ -6,6 +6,10 @@
 
 
 require 'cucumber/rails'
+require 'factory_bot_rails'
+
+# Include FactoryBot methods
+World(FactoryBot::Syntax::Methods)
 
 # By default, any exception happening in your Rails application will bubble up
 # to Cucumber so that your scenario will fail. This is a different from how

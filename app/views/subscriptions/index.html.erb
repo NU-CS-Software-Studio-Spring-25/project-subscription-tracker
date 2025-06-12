@@ -161,40 +161,54 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <%= form_with model: Subscription.new, local: true, class: "row g-2" do |form| %>
+          <%= form_with model: @subscription, local: true, class: "row g-2" do |form| %>
+            <!-- Display validation errors -->
+            <% if @subscription.errors.any? %>
+              <div class="col-12 mb-3">
+                <div class="alert alert-danger">
+                  <h6>Please fix the following errors:</h6>
+                  <ul class="mb-0">
+                    <% @subscription.errors.full_messages.each do |message| %>
+                      <li><%= message %></li>
+                    <% end %>
+                  </ul>
+                </div>
+              </div>
+            <% end %>
+            
             <!-- Row 1: Name and Category -->
             <div class="col-md-6">
               <%= form.label :name, class: "form-label" %>
-              <%= form.text_field :name, class: "form-control form-control-sm" %>
+              <%= form.text_field :name, class: "form-control form-control-sm #{'is-invalid' if @subscription.errors[:name].any?}", required: true %>
             </div>
             <div class="col-md-6">
               <%= form.label :category_id, "Category", class: "form-label" %>
               <%= form.collection_select :category_id, Category.alphabetical, :id, :name, 
                                         { prompt: "Select category" }, 
-                                        { class: "form-select form-select-sm" } %>
+                                        { class: "form-select form-select-sm #{'is-invalid' if @subscription.errors[:category_id].any?}" } %>
             </div>
             
             <!-- Row 2: Price and Billing Cycle -->
             <div class="col-md-6">
               <%= form.label :price, class: "form-label" %>
-              <%= form.number_field :price, step: 0.01, class: "form-control form-control-sm" %>
+              <%= form.number_field :price, step: 0.01, class: "form-control form-control-sm #{'is-invalid' if @subscription.errors[:price].any?}", required: true %>
             </div>
             <div class="col-md-6">
               <%= form.label :billing_cycle, class: "form-label" %>
               <%= form.select :billing_cycle, 
                              options_for_select([['Monthly', 'Monthly'], ['Yearly', 'Yearly']]),
                              { prompt: "Select billing cycle" }, 
-                             { class: "form-select form-select-sm" } %>
+                             { class: "form-select form-select-sm #{'is-invalid' if @subscription.errors[:billing_cycle].any?}", required: true } %>
             </div>
             
             <!-- Row 3: Next Payment Date and Notification Days -->
             <div class="col-md-6">
               <%= form.label :next_payment_date, class: "form-label" %>
-              <%= form.date_field :next_payment_date, class: "form-control form-control-sm" %>
+              <%= form.date_field :next_payment_date, class: "form-control form-control-sm #{'is-invalid' if @subscription.errors[:next_payment_date].any?}", required: true %>
             </div>
             <div class="col-md-6">
               <%= form.label :notification_days_before, "Notify (days before)", class: "form-label" %>
-              <%= form.number_field :notification_days_before, class: "form-control form-control-sm" %>
+              <%= form.number_field :notification_days_before, class: "form-control form-control-sm #{'is-invalid' if @subscription.errors[:notification_days_before].any?}" %>
             </div>
             
             <!-- Submit button -->
