@@ -84,7 +84,7 @@
           <li class="nav-item">
             <%= link_to 'Logout',
                         destroy_user_session_path,
-                        method: :delete,
+                        data: { turbo_method: :delete, turbo_confirm: 'Are you sure you want to log out?' },
                         class: 'nav-link fw-bolder' %>
           </li>
         <% else %>
