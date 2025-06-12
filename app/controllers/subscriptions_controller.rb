@@ -97,11 +97,23 @@ class SubscriptionsController < ApplicationController
     @subscription = current_user.subscriptions.find(params[:id])
   end
   def load_paginated_subscriptions
-    # The Pagy initializer (config/initializers/pagy.rb) now correctly sets
-    # DEFAULT[:items], DEFAULT[:limit], and disables items_param and items_extra.
-    # Explicitly setting items: 10 here is for clarity for this specific action,
-    # reinforcing the desired items count.
-    @pagy, @subscriptions = pagy(current_user.subscriptions.includes(:category).order(created_at: :desc), items: 10)
+    sort_column, sort_direction = case params[:sort]
+                                  when 'price_asc'
+                                    ['price', :asc]
+                                  when 'price_desc'
+                                    ['price', :desc]
+                                  when 'name'
+                                    ['name', :asc]
+                                  when 'next_payment_date'
+                                    ['next_payment_date', :asc]
+                                  else
+                                    ['created_at', :desc]
+                                  end
+
+    @pagy, @subscriptions = pagy(
+      current_user.subscriptions.includes(:category).order(sort_column => sort_direction),
+      items: 10
+    )
   end
 
   def load_categories
