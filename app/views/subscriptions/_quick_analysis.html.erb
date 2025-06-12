@@ -1,0 +1,142 @@
+<%# app/views/subscriptions/_quick_analysis.html.erb %>
+<div class="row">  <!-- Your Subscription Summary - Redesigned -->
+  <div class="col-12 mb-4">
+    <div class="card border-0 shadow-sm">
+      <div class="card-body py-4">
+        <div class="row">
+          <!-- Price Section -->
+          <div class="col-md-6 text-center mb-3 mb-md-0">
+            <div class="mb-2">
+              <small class="text-muted text-uppercase fw-bold">Current Price</small>
+            </div>
+            <div class="display-4 text-primary fw-bold mb-1">
+              <%= number_to_currency(analysis[:subscription_info][:current_price]) %>
+            </div>
+            <div class="badge bg-primary bg-opacity-10 text-primary px-3 py-2 fs-6">
+              <%= analysis[:subscription_info][:billing_cycle] %>
+            </div>
+          </div>
+          
+          <!-- Category Section -->
+          <div class="col-md-6 text-center">
+            <div class="mb-2">
+              <small class="text-muted text-uppercase fw-bold">Service Category</small>
+            </div>
+            <div class="fs-3 text-dark fw-semibold mb-2">
+              <%= analysis[:subscription_info][:category] %>
+            </div>
+            <div class="text-muted">
+              <i class="bi bi-tag me-1"></i>
+              Subscription Service
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Key Insights -->
+  <% if analysis[:price_comparison][:total_users] > 0 %>
+    <div class="col-md-6 mb-3">
+      <div class="card h-100">
+        <div class="card-body text-center">
+          <h6 class="card-title">
+            <i class="bi bi-bar-chart text-info"></i>
+            Market Position
+          </h6>
+          <div class="mb-2">
+            <span class="fs-5 fw-bold <%= analysis[:price_comparison][:percentile] > 50 ? 'text-warning' : 'text-success' %>">
+              <%= analysis[:price_comparison][:percentile] %>th percentile
+            </span>
+          </div>
+          <small class="text-muted">
+            Average: <%= number_to_currency(analysis[:price_comparison][:average_price]) %>
+            <br>
+            <%= analysis[:price_comparison][:total_users] %> users compared
+          </small>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6 mb-3">
+      <div class="card h-100">
+        <div class="card-body text-center">
+          <h6 class="card-title">
+            <i class="bi bi-piggy-bank text-success"></i>
+            Savings Potential
+          </h6>
+          <% if analysis[:savings_opportunities].any? %>
+            <% opportunity = analysis[:savings_opportunities].first %>
+            <div class="mb-2">
+              <span class="fs-5 fw-bold text-success">
+                $<%= opportunity[:potential_savings].round(2) %>/year
+              </span>
+            </div>
+            <small class="text-muted"><%= opportunity[:description] %></small>
+          <% else %>
+            <div class="mb-2">
+              <span class="fs-5 fw-bold text-muted">No savings found</span>
+            </div>
+            <small class="text-muted">You're getting a good deal!</small>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  <% else %>
+    <div class="col-12">
+      <div class="alert alert-info">
+        <i class="bi bi-info-circle"></i>
+        <strong>Limited Data Available</strong><br>
+        You're the only user with this subscription. More insights will be available as our user base grows.
+      </div>
+    </div>
+  <% end %>
+
+  <!-- Quick Billing Analysis -->
+  <% if analysis[:billing_cycle_analysis][:monthly][:count] > 0 || analysis[:billing_cycle_analysis][:yearly][:count] > 0 %>
+    <div class="col-12 mb-3">
+      <div class="card">
+        <div class="card-body">
+          <h6 class="card-title">
+            <i class="bi bi-calendar-event text-primary"></i>
+            Billing Options
+          </h6>
+          <div class="row">
+            <% if analysis[:billing_cycle_analysis][:monthly][:count] > 0 %>
+              <div class="col-6">
+                <strong>Monthly:</strong> 
+                <%= number_to_currency(analysis[:billing_cycle_analysis][:monthly][:average_price]) %>/mo
+                <small class="text-muted d-block">(<%= analysis[:billing_cycle_analysis][:monthly][:count] %> users)</small>
+              </div>
+            <% end %>
+            <% if analysis[:billing_cycle_analysis][:yearly][:count] > 0 %>
+              <div class="col-6">
+                <strong>Yearly:</strong> 
+                <%= number_to_currency(analysis[:billing_cycle_analysis][:yearly][:monthly_equivalent]) %>/mo
+                <small class="text-muted d-block">(<%= analysis[:billing_cycle_analysis][:yearly][:count] %> users)</small>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>  <!-- Popular Alternatives (if any) -->
+  <% if analysis[:alternative_suggestions].any? %>
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <h6 class="card-title">
+            <i class="bi bi-lightbulb text-warning"></i>
+            Popular Alternatives
+          </h6>          <div class="d-flex flex-wrap gap-2">
+            <% analysis[:alternative_suggestions].take(3).each do |alt| %>
+              <span class="text-dark fs-6 px-3 py-2">
+                <%= alt[:name] %> - <%= number_to_currency(alt[:average_price]) %>
+              </span>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>

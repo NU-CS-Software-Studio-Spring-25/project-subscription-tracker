@@ -1,0 +1,41 @@
+<%# app/views/subscriptions/_price_analysis_modal.html.erb %>
+<div class="modal fade" 
+     id="priceAnalysisModal_<%= subscription.id %>" 
+     tabindex="-1" 
+     aria-labelledby="priceAnalysisModalLabel_<%= subscription.id %>" 
+     aria-hidden="true"
+     data-controller="price-analysis"
+     data-price-analysis-subscription-id-value="<%= subscription.id %>">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="priceAnalysisModalLabel_<%= subscription.id %>">
+          <i class="bi bi-graph-up text-info"></i>
+          Price Analysis: <%= subscription.name %>
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      
+      <div class="modal-body">
+        <div data-price-analysis-target="content">
+          <!-- Content will be loaded here via AJAX -->
+          <div class="text-center p-4">
+            <div class="spinner-border text-info" role="status">
+              <span class="visually-hidden">Loading price analysis...</span>
+            </div>
+            <p class="mt-2 text-muted">Analyzing market data...</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>        <a href="<%= price_analysis_subscription_path(subscription) %>" 
+           target="_blank" 
+           class="btn btn-info">
+          <i class="bi bi-zoom-in"></i>
+          View Detailed Analysis
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

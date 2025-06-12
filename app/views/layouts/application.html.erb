@@ -89,12 +89,30 @@
           bootstrap.Alert.getOrCreateInstance(alert).close();
         }, 5000);
       });
-    }
-
-    // first full-page load
+    }    // first full-page load
     document.addEventListener('DOMContentLoaded', initFlashAlerts);
     // subsequent Turbo visits
-    document.addEventListener('turbo:load',       initFlashAlerts);
+    document.addEventListener('turbo:load',       initFlashAlerts);    // Initialize Bootstrap tooltips
+    function initTooltips() {
+      // Initialize tooltips for elements with data-bs-toggle="tooltip"
+      const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+      tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+      });
+
+      // Initialize tooltips for buttons with title attribute (edit and delete buttons)
+      const titleElements = [].slice.call(document.querySelectorAll('.btn-icon[title]:not([data-bs-toggle="tooltip"])'));
+      titleElements.map(function (element) {
+        return new bootstrap.Tooltip(element, {
+          placement: 'top',
+          trigger: 'hover focus'
+        });
+      });
+    }
+
+    // Initialize tooltips on page load and Turbo navigation
+    document.addEventListener('DOMContentLoaded', initTooltips);
+    document.addEventListener('turbo:load', initTooltips);
   </script>
 </body>
 </html>
