@@ -48,38 +48,12 @@ self.addEventListener('activate', e => {
 });
 
 self.addEventListener('fetch', event => {
-  const url = event.request.url;
-  if (url.startsWith('https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js')) {
-    event.respondWith(
-      caches.match(event.request)
-        .then(cached => cached || fetch(event.request).then(networkRes => {
-          caches.open(CACHE_NAME).then(cache => cache.put(event.request, networkRes.clone()));
-          return networkRes;
-        }))
-    );
-    return;
-  }
-
-  if (url.startsWith('https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css')) {
-    event.respondWith(
-      caches.match(event.request)
-        .then(cached => cached || fetchAndCache(event.request))
-    );
-    return;
-  }
-
   event.respondWith(
     caches.match(event.request)
-      .then(cached => cached || fetch(event.request))
+      .then(cached => {
+        if (cached) return cached;
+        return fetch(event.request);
+      })
   );
-});;
+});
 
-// helper to fetch & put in cache
-async function fetchAndCache(request) {
-  const networkRes = await fetch(request);
-  if (networkRes.ok) {
-    const cache = await caches.open(CACHE_NAME);
-    cache.put(request, networkRes.clone());
-  }
-  return networkRes;
-}
