@@ -17,7 +17,7 @@ def create_subscription_with_defaults(base_attrs)
   defaults = {
     billing_cycle: 'Monthly',
     notes: '',
-    notification_days_before: 7
+    notification_days_before: 0  # Default to 0, will be overridden selectively
   }
   defaults.merge(base_attrs)
 end
@@ -136,13 +136,17 @@ subscription_data = [
 ]
 
 # Create subscriptions using the helper method
-subscription_data.each do |name, price, billing_cycle, payment_date, category|
+subscription_data.each_with_index do |(name, price, billing_cycle, payment_date, category), index|
+  # Only first 2 subscriptions get notification_days_before set to 7
+  notification_days = index < 2 ? 7 : 0
+  
   subscription_attrs = create_subscription_with_defaults({
     name: name,
     price: price,
     billing_cycle: billing_cycle,
     next_payment_date: Date.parse(payment_date),
-    category: category
+    category: category,
+    notification_days_before: notification_days
   })
   user.subscriptions.create!(subscription_attrs)
 end
@@ -231,6 +235,8 @@ def create_sample_subscriptions_for_market_analysis(users, default_user_email, b
     entertainment: categories[:entertainment],
     utilities: categories[:utilities]
   }
+  # Track subscription counts per user to limit notifications to 2 per user
+  user_subscription_counts = Hash.new(0)
 
   sample_subscriptions.each do |sub_data|
     sub_data[:prices].each_with_index do |price, index|
@@ -239,13 +245,17 @@ def create_sample_subscriptions_for_market_analysis(users, default_user_email, b
       user = users[index]
       next if user.email == default_user_email # Skip default user to avoid duplicates
       
+      # Only first 2 subscriptions per user get notification_days_before set to 7
+      user_subscription_counts[user.id] += 1
+      notification_days = user_subscription_counts[user.id] <= 2 ? 7 : 0
+      
       subscription_attrs = create_subscription_with_defaults({
         name: sub_data[:name],
         price: price,
         billing_cycle: sub_data[:billing_cycle],
         category: category_map[sub_data[:category]],
         next_payment_date: base_date + rand(1..30).days,
-        notification_days_before: [3, 5, 7, 10].sample,
+        notification_days_before: notification_days,
         notes: "Sample data for market analysis"
       })
       
