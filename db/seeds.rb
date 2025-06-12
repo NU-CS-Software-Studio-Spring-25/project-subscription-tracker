@@ -50,7 +50,7 @@ categories_data = [
 # Create categories and store references
 categories = {}
 categories_data.each do |category_name|
-  categories[category_name.downcase.gsub(/[^a-z]/, '_').to_sym] = Category.create!(name: category_name)
+  categories[category_name.parameterize.underscore.to_sym] = Category.create!(name: category_name)
 end
 
 # Extract category references for easier access
@@ -60,12 +60,12 @@ housing = categories[:housing]
 utilities = categories[:utilities]
 streaming = categories[:streaming_services]
 food_delivery = categories[:food_delivery]
-news_magazines = categories[:news___magazines]
+news_magazines = categories[:news_and_magazines]
 software = categories[:software]
 fitness = categories[:fitness]
 education = categories[:education]
 travel = categories[:travel]
-health = categories[:health___wellness]
+health = categories[:health_and_wellness]
 
 puts "#{Category.count} categories created."
 
@@ -224,8 +224,8 @@ def create_sample_subscriptions_for_market_analysis(users, default_user_email, b
     software: categories[:software],
     fitness: categories[:fitness],
     food_delivery: categories[:food_delivery],
-    news_magazines: categories[:news___magazines],
-    health: categories[:health___wellness],
+    news_magazines: categories[:news_and_magazines],
+    health: categories[:health_and_wellness],
     education: categories[:education],
     entertainment: categories[:entertainment],
     utilities: categories[:utilities]
