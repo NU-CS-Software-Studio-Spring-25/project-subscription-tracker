@@ -23,7 +23,16 @@ Rails.application.routes.draw do
   # PWA Manifest route
   get "/manifest.json", to: "pwa#manifest", defaults: { format: :json }, as: :pwa_manifest
 
-  root 'subscriptions#summary'  # Makes the subscription page your homepage
+  # Landing page route
+  get "/", to: "pages#landing", as: :landing_page
+  
+  # Authenticated users go to subscriptions summary
+  authenticated :user do
+    root 'subscriptions#summary', as: :authenticated_root
+  end
+  
+  # Non-authenticated users see the landing page
+  root 'pages#landing'
   
   match "/404", to: "errors#not_found", via: :all
   match "/500", to: "errors#internal_server_error", via: :all

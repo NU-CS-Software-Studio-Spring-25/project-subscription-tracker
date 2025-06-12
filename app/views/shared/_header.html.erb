@@ -1,4 +1,3 @@
-<!-- app/views/shared/_header.html.erb -->
 <nav class="navbar navbar-light bg-light shadow mb-3" role="navigation" aria-label="Main navigation">
   <div class="container-fluid d-flex px-5 align-items-center">
 
@@ -7,24 +6,26 @@
       <%= image_tag 'logo.png', alt: 'Logo', style: 'height:3rem;' %>
     <% end %>
 
-    <!-- Desktop nav links (centered, hidden <lg) -->
-    <ul class="navbar-nav d-none d-lg-flex flex-row gap-5 mx-auto">
-      <li class="nav-item">
-        <%= link_to 'Subscriptions', '/subscriptions',
-                    class: 'nav-link fw-bold fs-5' %>
-      </li>
-      <li class="nav-item">
-        <%= link_to 'Categories', '/categories',
-                    class: 'nav-link fw-bold fs-5' %>
-      </li>
-      <li class="nav-item">
-        <%= link_to 'Budgeting', '/categories/budgeting',
-                    class: 'nav-link fw-bold fs-5' %>
-      </li>
-    </ul>
+    <!-- Desktop nav links (centered, hidden <lg) - Only show if authenticated -->
+    <% if user_signed_in? %>
+      <ul class="navbar-nav d-none d-lg-flex flex-row gap-5 mx-auto">
+        <li class="nav-item">
+          <%= link_to 'Subscriptions', '/subscriptions',
+                      class: 'nav-link fw-bold fs-5' %>
+        </li>
+        <li class="nav-item">
+          <%= link_to 'Categories', '/categories',
+                      class: 'nav-link fw-bold fs-5' %>
+        </li>
+        <li class="nav-item">
+          <%= link_to 'Budgeting', '/categories/budgeting',
+                      class: 'nav-link fw-bold fs-5' %>
+        </li>
+      </ul>
+    <% end %>
 
     <!-- Desktop auth links (right, hidden <lg) -->
-    <ul class="navbar-nav d-none d-lg-flex flex-row gap-3">
+    <ul class="navbar-nav d-none d-lg-flex flex-row gap-3 <%= 'ms-auto' unless user_signed_in? %>">
       <% if user_signed_in? %>
         <li class="nav-item">
           <span class="nav-link fw-bold">Logged in as <%= current_user.email %></span>
@@ -49,35 +50,37 @@
       <% end %>
     </ul>
 
-    <!-- Mobile burger (centered on <lg) -->
-    <button class="navbar-toggler d-lg-none" type="button"
-            data-bs-toggle="collapse" data-bs-target="#mobileNav"
-            aria-controls="mobileNav" aria-expanded="false"
-            aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
+    <!-- Mobile burger (centered on <lg) - Only show if authenticated -->
+    <% if user_signed_in? %>
+      <button class="navbar-toggler d-lg-none" type="button"
+              data-bs-toggle="collapse" data-bs-target="#mobileNav"
+              aria-controls="mobileNav" aria-expanded="false"
+              aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    <% end %>
   </div>
 
-  <!-- Mobile-only collapsed menu -->
-  <div class="collapse d-lg-none" id="mobileNav">
-    <div class="container-fluid bg-light px-5 py-3">
-      <ul class="navbar-nav">
-        <!-- nav links -->
-        <li class="nav-item">
-          <%= link_to 'Subscriptions', '/subscriptions',
-                      class: 'nav-link fw-bolder' %>
-        </li>
-        <li class="nav-item">
-          <%= link_to 'Categories', '/categories',
-                      class: 'nav-link fw-bolder' %>
-        </li>
-        <li class="nav-item">
-          <%= link_to 'Budgeting', '/categories/budgeting',
-                      class: 'nav-link fw-bolder' %>
-        </li>
-        <li><hr class="my-2"></li>
-        <!-- auth links -->
-        <% if user_signed_in? %>
+  <!-- Mobile-only collapsed menu - Only show if authenticated -->
+  <% if user_signed_in? %>
+    <div class="collapse d-lg-none" id="mobileNav">
+      <div class="container-fluid bg-light px-5 py-3">
+        <ul class="navbar-nav">
+          <!-- nav links -->
+          <li class="nav-item">
+            <%= link_to 'Subscriptions', '/subscriptions',
+                        class: 'nav-link fw-bolder' %>
+          </li>
+          <li class="nav-item">
+            <%= link_to 'Categories', '/categories',
+                        class: 'nav-link fw-bolder' %>
+          </li>
+          <li class="nav-item">
+            <%= link_to 'Budgeting', '/categories/budgeting',
+                        class: 'nav-link fw-bolder' %>
+          </li>
+          <li><hr class="my-2"></li>
+          <!-- auth links -->
           <li class="nav-item">
             <span class="nav-link fw-bolder">Logged in as <%= current_user.email %></span>
           </li>
@@ -87,19 +90,8 @@
                         data: { turbo_method: :delete, turbo_confirm: 'Are you sure you want to log out?' },
                         class: 'nav-link fw-bolder' %>
           </li>
-        <% else %>
-          <li class="nav-item">
-            <%= link_to 'Login',
-                        new_user_session_path,
-                        class: 'nav-link fw-bolder' %>
-          </li>
-          <li class="nav-item">
-            <%= link_to 'Sign up',
-                        new_user_registration_path,
-                        class: 'nav-link fw-bolder' %>
-          </li>
-        <% end %>
-      </ul>
+        </ul>
+      </div>
     </div>
-  </div>
+  <% end %>
 </nav>

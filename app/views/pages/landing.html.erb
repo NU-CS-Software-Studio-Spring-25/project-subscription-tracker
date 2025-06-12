@@ -1,0 +1,218 @@
+<!-- Hero Section -->
+<section class="bg-white text-dark text-center py-5">
+  <div class="container">
+    <h1 class="display-4">Take Control of Your Subscriptions</h1>
+    <p class="lead">Track all your recurring subscriptions in one place. Get insights, set budgets, and never miss a payment again.</p>
+    <%= link_to "Start Tracking - It's Free", new_user_registration_path, class: 'btn btn-primary btn-lg mt-3' %>
+  </div>
+</section>
+
+<!-- Features -->
+<section id="features" class="py-5">
+  <div class="container">
+    <h2 class="text-center mb-4">Everything You Need to Manage Subscriptions</h2>
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="card h-100 text-center">
+          <div class="card-body">
+            <i class="bi bi-list-check text-primary display-4 mb-3"></i>
+            <h5 class="card-title">Track All Subscriptions</h5>
+            <p class="card-text">Add all your subscriptions with pricing, billing cycles, and payment dates. See your complete subscription portfolio at a glance.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card h-100 text-center">
+          <div class="card-body">
+            <i class="bi bi-graph-up text-info display-4 mb-3"></i>
+            <h5 class="card-title">Price Analysis</h5>
+            <p class="card-text">Compare your subscription prices with community data. See if you're paying above or below average with detailed percentile rankings.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card h-100 text-center">
+          <div class="card-body">
+            <i class="bi bi-piggy-bank text-success display-4 mb-3"></i>
+            <h5 class="card-title">Budget by Category</h5>
+            <p class="card-text">Set spending limits for different subscription categories like streaming, productivity, or fitness. Track your progress and stay on budget.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Second row of features -->
+    <div class="row g-4 mt-4">
+      <div class="col-md-4">
+        <div class="card h-100 text-center">
+          <div class="card-body">
+            <i class="bi bi-bell text-warning display-4 mb-3"></i>
+            <h5 class="card-title">Payment Reminders</h5>
+            <p class="card-text">Get notified before your subscriptions renew. Set custom reminder periods so you never get surprised by unexpected charges.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card h-100 text-center">
+          <div class="card-body">
+            <i class="bi bi-calendar-event text-secondary display-4 mb-3"></i>
+            <h5 class="card-title">Billing Cycle Insights</h5>
+            <p class="card-text">Analyze whether monthly or yearly billing saves you money. Make informed decisions about your subscription payment schedules.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card h-100 text-center">
+          <div class="card-body">
+            <i class="bi bi-tags text-danger display-4 mb-3"></i>
+            <h5 class="card-title">Organize by Categories</h5>
+            <p class="card-text">Group subscriptions into categories like Entertainment, Productivity, or Health. See where your money goes and compare spending patterns.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Dashboard Preview -->
+<section class="bg-light py-5">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-lg-6">
+        <h2 class="mb-4">Your Subscription Dashboard</h2>
+        <ul class="list-unstyled">
+          <li class="mb-3"><i class="bi bi-check-circle-fill text-success me-2"></i><strong>Total Monthly Spending:</strong> See your exact monthly subscription costs</li>
+          <li class="mb-3"><i class="bi bi-check-circle-fill text-success me-2"></i><strong>Upcoming Payments:</strong> Know what's due and when</li>
+          <li class="mb-3"><i class="bi bi-check-circle-fill text-success me-2"></i><strong>Category Breakdown:</strong> Understand spending by type</li>
+          <li class="mb-3"><i class="bi bi-check-circle-fill text-success me-2"></i><strong>Price Comparisons:</strong> See if you're overpaying</li>
+        </ul>
+        <p class="text-muted">Get a complete overview of your subscription spending with detailed analytics and actionable insights.</p>
+      </div>
+      <div class="col-lg-6">
+        <div class="card shadow-lg">
+          <div class="card-body">
+            <h6 class="card-title text-muted mb-3">Sample Dashboard</h6>
+            
+            <!-- Next payment info -->
+            <div class="row mb-3">
+              <div class="col-6">
+                <small class="text-muted">Next payment due</small>
+                <div><strong>March 15, 2025</strong></div>
+              </div>
+              <div class="col-6">
+                <small class="text-muted">Due in next 7 days</small>
+                <div><strong>$24.98</strong></div>
+              </div>
+            </div>
+            
+            <!-- Key stats grid -->
+            <div class="row g-2 mb-3">
+              <div class="col-6">
+                <div class="p-2 border rounded text-center">
+                  <small class="text-muted">Monthly plans</small>
+                  <div><strong class="text-primary">8</strong></div>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="p-2 border rounded text-center">
+                  <small class="text-muted">Yearly plans</small>
+                  <div><strong class="text-secondary">3</strong></div>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="p-2 border rounded text-center">
+                  <small class="text-muted">Monthly Costs</small>
+                  <div><strong class="text-primary">$89.94</strong></div>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="p-2 border rounded text-center">
+                  <small class="text-muted">Yearly Costs</small>
+                  <div><strong class="text-secondary">$287.97</strong></div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Mini pie chart representation -->
+            <div class="text-center">
+              <small class="text-muted d-block mb-2">Plan Distribution</small>
+              <div class="d-flex justify-content-center align-items-center gap-3">
+                <div class="d-flex align-items-center">
+                  <div class="bg-primary rounded-circle me-2" style="width: 12px; height: 12px;"></div>
+                  <small>Monthly (8)</small>
+                </div>
+                <div class="d-flex align-items-center">
+                  <div class="bg-secondary rounded-circle me-2" style="width: 12px; height: 12px;"></div>
+                  <small>Yearly (3)</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- How It Works -->
+<section class="py-5">
+  <div class="container">
+    <h2 class="text-center mb-5">How It Works</h2>
+    <div class="row g-4">
+      <div class="col-md-4 text-center">
+        <div class="mb-3">
+          <span class="badge bg-primary rounded-circle p-3 fs-4">1</span>
+        </div>
+        <h5>Add Your Subscriptions</h5>
+        <p class="text-dark">Enter your subscription details: name, price, billing cycle, and next payment date. We'll track everything for you.</p>
+      </div>
+      <div class="col-md-4 text-center">
+        <div class="mb-3">
+          <span class="badge bg-primary rounded-circle p-3 fs-4">2</span>
+        </div>
+        <h5>Set Your Budgets</h5>
+        <p class="text-dark">Create category budgets for different types of subscriptions. Set spending limits that work for your lifestyle.</p>
+      </div>
+      <div class="col-md-4 text-center">
+        <div class="mb-3">
+          <span class="badge bg-primary rounded-circle p-3 fs-4">3</span>
+        </div>
+        <h5>Get Insights & Alerts</h5>
+        <p class="text-dark">Receive price analysis, budget alerts, and payment reminders. Make informed decisions about your subscriptions.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials -->
+<section id="testimonials" class="bg-light py-5">
+  <div class="container">
+    <h2 class="text-center mb-4">What Our Users Say</h2>
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="card h-100">
+          <div class="card-body">
+            <p class="card-text">"Finally know exactly what I'm spending on subscriptions each month. The price analysis helped me realize I was overpaying for several services."</p>
+            <h6 class="card-subtitle text-muted">— Alex M.</h6>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card h-100">
+          <div class="card-body">
+            <p class="card-text">"The budget tracking keeps me accountable. I set limits for entertainment and productivity apps, and it's working great."</p>
+            <h6 class="card-subtitle text-muted">— Sarah K.</h6>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card h-100">
+          <div class="card-body">
+            <p class="card-text">"Payment reminders are a lifesaver. No more surprise charges on my credit card from subscriptions I forgot about."</p>
+            <h6 class="card-subtitle text-muted">— Jordan L.</h6>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
