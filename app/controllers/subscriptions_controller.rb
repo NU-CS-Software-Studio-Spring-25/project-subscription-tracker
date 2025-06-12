@@ -16,11 +16,11 @@ class SubscriptionsController < ApplicationController
   
     if upcoming.any?
       names = upcoming.map(&:name).to_sentence(two_words_connector: " and ")
-      flash.now[:alert] = "Heads up! Your #{names} subscription#{'s' if upcoming.size > 1}
-       #{upcoming.size > 1 ? 'are' : 'is'} due soon."      
+      flash.now[:alert] = "Heads up! Your #{names} subscription#{'s' if upcoming.size > 1} #{upcoming.size > 1 ? 'are' : 'is'} due soon."      
     end
 
     load_paginated_subscriptions
+    @subscription = Subscription.new # Add this for the modal form
   end
 
   def create
@@ -35,8 +35,13 @@ class SubscriptionsController < ApplicationController
         format.json { render json: { success: true, subscription: @subscription }, status: :created }
       end
     else
+      # When validation fails, reload the index page with errors
+      load_paginated_subscriptions
       respond_to do |format|
-        format.html { render :new }
+        format.html { 
+          flash.now[:alert] = 'Please fix the errors below.'
+          render :index, status: :unprocessable_entity 
+        }
         format.json { render json: { errors: @subscription.errors.full_messages }, status: :unprocessable_entity }
       end
     end
