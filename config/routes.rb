@@ -19,6 +19,10 @@ Rails.application.routes.draw do
       get :quick_analysis    # → GET /subscriptions/:id/quick_analysis
     end
   end
+  
+  # PWA Manifest route
+  get "/manifest.json", to: "pwa#manifest", defaults: { format: :json }, as: :pwa_manifest
+
   root 'subscriptions#summary'  # Makes the subscription page your homepage
   
   match "/404", to: "errors#not_found", via: :all
