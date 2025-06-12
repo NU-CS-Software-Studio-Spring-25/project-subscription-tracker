@@ -17,21 +17,24 @@
               <%= render "devise/shared/error_messages", resource: resource %>
 
               <div class="row g-3">
-                <div class="col-12">
+                <div class="col-md-6">
                   <%= f.label :email, class: 'form-label' %>
                   <%= f.email_field :email,
                         autofocus: true,
                         autocomplete: "email",
-                        class: "form-control" %>
+                        class: "form-control",
+                        maxlength: 100 %>
+                  <small class="form-text text-muted">Max 100 characters</small>
                 </div>
 
                 <div class="col-md-6">
                   <%= f.label :password, class: 'form-label' %>
                   <%= f.password_field :password,
                         autocomplete: "new-password",
-                        class: "form-control" %>
+                        class: "form-control",
+                        maxlength: 128 %>
                   <% if @minimum_password_length %>
-                    <small class="text-muted d-block">(<%= @minimum_password_length %> characters minimum)</small>
+                    <small class="text-muted d-block">(<%= @minimum_password_length %>-128 characters)</small>
                   <% end %>
                 </div>
 
@@ -39,7 +42,8 @@
                   <%= f.label :password_confirmation, class: 'form-label' %>
                   <%= f.password_field :password_confirmation,
                         autocomplete: "new-password",
-                        class: "form-control" %>
+                        class: "form-control",
+                        maxlength: 128 %>
                 </div>
 
                 <div class="col-12">

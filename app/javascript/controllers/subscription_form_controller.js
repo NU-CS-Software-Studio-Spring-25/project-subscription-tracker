@@ -50,8 +50,10 @@ export default class extends Controller {
         <div class="modal-body">
           <div class="mb-3">
             <label class="form-label">Service Name *</label>
-            <input type="text" class="form-control" name="name" value="${formData.name}" required>
+            <input type="text" class="form-control" name="name" value="${formData.name}" 
+                   required maxlength="50">
             <div class="invalid-feedback"></div>
+            <small class="form-text text-muted">Max 50 characters</small>
           </div>
           <div class="mb-3">
             <label class="form-label">Category *</label>
@@ -63,8 +65,10 @@ export default class extends Controller {
           </div>
           <div class="mb-3">
             <label class="form-label">Amount ($) *</label>
-            <input type="number" step="0.01" class="form-control" name="price" value="${formData.price}" required>
+            <input type="number" step="0.01" class="form-control" name="price" 
+                   value="${formData.price}" required min="0.01" max="99999.99">
             <div class="invalid-feedback"></div>
+            <small class="form-text text-muted">Max $99,999.99</small>
           </div>
           <div class="mb-3">
             <label class="form-label">Billing Cycle *</label>
@@ -83,8 +87,9 @@ export default class extends Controller {
           <div class="mb-3">
             <label class="form-label">Notification Days Before</label>
             <input type="number" class="form-control" name="notification_days_before" 
-                   value="${formData.notification_days_before}" min="0" max="365">
+                   value="${formData.notification_days_before}" min="0" max="365" maxlength="3">
             <div class="invalid-feedback"></div>
+            <small class="form-text text-muted">0-365 days</small>
           </div>
         </div>
         <div class="modal-footer">
@@ -230,4 +235,4 @@ export default class extends Controller {
     document.body.appendChild(alert)
     setTimeout(() => alert.remove(), 3000)
   }
-} 
+}
