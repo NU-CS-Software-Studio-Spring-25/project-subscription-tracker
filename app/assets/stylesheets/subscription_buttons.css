@@ -1,0 +1,71 @@
+/* Subscription Action Buttons Styles */
+
+.btn-icon {
+  position: relative;
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-icon:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.btn-icon:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Specific button color variants */
+.btn-icon.text-info:hover {
+  background-color: rgba(23, 162, 184, 0.1);
+  color: #117a8b !important;
+}
+
+.btn-icon.text-primary:hover {
+  background-color: rgba(13, 110, 253, 0.1);
+  color: #0a58ca !important;
+}
+
+.btn-icon.text-danger:hover {
+  background-color: rgba(220, 53, 69, 0.1);
+  color: #b02a37 !important;
+}
+
+/* Button group spacing */
+.btn-group .btn-icon {
+  margin: 0 2px;
+}
+
+.btn-group .btn-icon:first-child {
+  margin-left: 0;
+}
+
+.btn-group .btn-group:last-child {
+  margin-right: 0;
+}
+
+/* Focus states for accessibility */
+.btn-icon:focus {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* Animation for icons */
+.btn-icon i {
+  transition: transform 0.2s ease-in-out;
+}
+
+.btn-icon:hover i {
+  transform: scale(1.1);
+}
+
+/* Ensure proper spacing in button groups */
+.subscription-card .btn-group {
+  gap: 4px;
+}
