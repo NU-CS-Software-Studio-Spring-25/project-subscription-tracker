@@ -214,10 +214,9 @@
                   <i class="bi bi-tags text-secondary"></i> 
                   Category Insights: <%= @analysis[:category_insights][:category_name] %>
                 </h3>
-                <div class="row">
-                  <div class="col-md-6">
+                <div class="row">                  <div class="col-md-6">
                     <p class="mb-2">
-                      <strong><%= @analysis[:category_insights][:total_users] %></strong> users in this category
+                      Users in this category: <strong><%= @analysis[:category_insights][:total_users] %></strong>
                     </p>
                     <p class="mb-2">
                       Average monthly spend: <strong><%= number_to_currency(@analysis[:category_insights][:average_monthly_spend]) %></strong>
