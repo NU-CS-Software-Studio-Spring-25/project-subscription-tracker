@@ -2,7 +2,7 @@
 class SubscriptionsController < ApplicationController
   include ActionView::Helpers::NumberHelper
   before_action :authenticate_user!
-  before_action :set_subscription, only: %i[update destroy]
+  before_action :set_subscription, only: %i[update destroy price_analysis quick_analysis]
   before_action :load_categories,    only: %i[index create update]
 
   def index
@@ -63,7 +63,6 @@ class SubscriptionsController < ApplicationController
     @subscription.destroy
     redirect_to subscriptions_path, notice: 'Subscription deleted successfully!'
   end
-
   def summary
     @total_count   = current_user.subscriptions.count
     @total_price   = current_user.subscriptions.sum(:price)
@@ -79,19 +78,30 @@ class SubscriptionsController < ApplicationController
     range = Date.today - 59.days..Date.today
     @payments_by_day = current_user.subscriptions
       .where(next_payment_date: range)
-      .group(:next_payment_date)
-      .count
+      .group(:next_payment_date)      .count
 
-  end    
+  end
+  
+  def price_analysis
+    @analysis = MarketAnalysisService.new(@subscription).analyze
+  end
+
+  def quick_analysis
+    @analysis = MarketAnalysisService.new(@subscription).analyze
+    render partial: 'quick_analysis', locals: { analysis: @analysis }
+  end
 
   private
 
   def set_subscription
     @subscription = current_user.subscriptions.find(params[:id])
   end
-
   def load_paginated_subscriptions
-    @pagy, @subscriptions = pagy(current_user.subscriptions.includes(:category).order(created_at: :desc), items: 9)
+    # The Pagy initializer (config/initializers/pagy.rb) now correctly sets
+    # DEFAULT[:items], DEFAULT[:limit], and disables items_param and items_extra.
+    # Explicitly setting items: 10 here is for clarity for this specific action,
+    # reinforcing the desired items count.
+    @pagy, @subscriptions = pagy(current_user.subscriptions.includes(:category).order(created_at: :desc), items: 10)
   end
 
   def load_categories

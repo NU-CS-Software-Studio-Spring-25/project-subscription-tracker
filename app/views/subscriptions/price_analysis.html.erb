@@ -1,0 +1,309 @@
+<%# app/views/subscriptions/price_analysis.html.erb %>
+<% content_for(:title, "Price Analysis - #{@analysis[:subscription_info][:name]}") %>
+
+<div class="container">
+  <div class="card shadow">
+    <div class="card-body">      <!-- Header -->
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+          <h1 class="mb-1">Price Analysis</h1>
+        </div>
+        <button onclick="window.close()" class="btn btn-outline-secondary">
+          <i class="bi bi-x-lg"></i> Close
+        </button>
+      </div>      <!-- Your Subscription Info -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card bg-light">
+            <div class="card-body">
+              <h3 class="h5 mb-3"><%= @analysis[:subscription_info][:name] %></h3>              <div class="row align-items-top">
+                <div class="col-md-3">
+                  <strong>Price:</strong><br>
+                  <span class="text-primary fw-bold"><%= number_to_currency(@analysis[:subscription_info][:current_price]) %></span>
+                </div>
+                <div class="col-md-3">
+                  <strong>Billing:</strong><br>
+                  <span class="badge bg-<%= @analysis[:subscription_info][:billing_cycle] == 'Monthly' ? 'primary' : 'secondary' %>">
+                    <%= @analysis[:subscription_info][:billing_cycle] %>
+                  </span>
+                </div>
+                <div class="col-md-3">
+                  <strong>Category:</strong><br>
+                  <span><%= @analysis[:subscription_info][:category] %></span>
+                </div>
+                <div class="col-md-3">
+                  <strong><%= @analysis[:subscription_info][:billing_cycle_equivalent][:equivalent_cycle] %> Equivalent:</strong><br>
+                  <span class="text-muted">
+                    <% if @analysis[:subscription_info][:billing_cycle_equivalent][:equivalent_cycle] == 'Monthly' %>
+                      <%= number_to_currency(@analysis[:subscription_info][:billing_cycle_equivalent][:equivalent_price]) %>/month
+                    <% else %>
+                      <%= number_to_currency(@analysis[:subscription_info][:billing_cycle_equivalent][:equivalent_price]) %>/year
+                    <% end %>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>      <!-- Price Comparison and Billing Cycle Analysis - Side by Side -->
+      <% if @analysis[:price_comparison][:total_users] > 0 %>
+        <div class="row mb-4">
+          <!-- Price Comparison -->
+          <div class="col-md-6 mb-3 mb-md-0">
+            <div class="card h-100">
+              <div class="card-body">
+                <h3 class="h6 mb-3">
+                  <i class="bi bi-bar-chart text-info"></i> Price Comparison
+                </h3>
+                <div class="row">
+                  <div class="col-6">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                      <span class="small">Your Price:</span>
+                      <strong class="text-primary small"><%= number_to_currency(@analysis[:price_comparison][:your_price]) %></strong>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                      <span class="small">Average:</span>
+                      <strong class="small"><%= number_to_currency(@analysis[:price_comparison][:average_price]) %></strong>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                      <span class="small">Median:</span>
+                      <strong class="small"><%= number_to_currency(@analysis[:price_comparison][:median_price]) %></strong>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                      <span class="small">Percentile:</span>
+                      <strong class="<%= @analysis[:price_comparison][:percentile] > 50 ? 'text-warning' : 'text-success' %> small">
+                        <%= @analysis[:price_comparison][:percentile] %>%
+                      </strong>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                      <span class="small">Users:</span>
+                      <strong class="small"><%= @analysis[:price_comparison][:total_users] %></strong>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                      <span class="small">Range:</span>
+                      <strong class="small">
+                        <%= number_to_currency(@analysis[:price_comparison][:price_range][:min]) %> - 
+                        <%= number_to_currency(@analysis[:price_comparison][:price_range][:max]) %>
+                      </strong>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- Compact Price Visualization -->
+                <div class="mt-3">
+                  <div class="progress" style="height: 15px;">
+                    <% percentile = @analysis[:price_comparison][:percentile] %>
+                    <div class="progress-bar bg-success" style="width: <%= [percentile, 100].min %>%">
+                      <small>You're here (<%= percentile %>%)</small>
+                    </div>
+                  </div>
+                  <div class="d-flex justify-content-between mt-1">
+                    <small class="text-muted">Cheapest</small>
+                    <small class="text-muted">Most Expensive</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Billing Cycle Analysis -->
+          <% if @analysis[:billing_cycle_analysis][:monthly][:count] > 0 || @analysis[:billing_cycle_analysis][:yearly][:count] > 0 %>
+            <div class="col-md-6">
+              <div class="card h-100">
+                <div class="card-body">
+                  <h3 class="h6 mb-3">
+                    <i class="bi bi-calendar-event text-primary"></i> Billing Cycle Analysis
+                  </h3>
+                  <div class="row">
+                    <div class="col-6">
+                      <h4 class="small fw-bold mb-2">Monthly Billing</h4>
+                      <% if @analysis[:billing_cycle_analysis][:monthly][:count] > 0 %>
+                        <p class="mb-1 small">
+                          <strong><%= @analysis[:billing_cycle_analysis][:monthly][:count] %></strong> users
+                        </p>
+                        <p class="mb-1 small">
+                          Avg: <strong><%= number_to_currency(@analysis[:billing_cycle_analysis][:monthly][:average_price]) %></strong>
+                        </p>
+                        <p class="mb-0 small">
+                          Med: <strong><%= number_to_currency(@analysis[:billing_cycle_analysis][:monthly][:median_price]) %></strong>
+                        </p>
+                      <% else %>
+                        <p class="text-muted small">No data available</p>
+                      <% end %>
+                    </div>
+                    <div class="col-6">
+                      <h4 class="small fw-bold mb-2">Yearly Billing</h4>
+                      <% if @analysis[:billing_cycle_analysis][:yearly][:count] > 0 %>
+                        <p class="mb-1 small">
+                          <strong><%= @analysis[:billing_cycle_analysis][:yearly][:count] %></strong> users
+                        </p>
+                        <p class="mb-1 small">
+                          Avg: <strong><%= number_to_currency(@analysis[:billing_cycle_analysis][:yearly][:average_price]) %></strong>
+                        </p>
+                        <p class="mb-1 small">
+                          Med: <strong><%= number_to_currency(@analysis[:billing_cycle_analysis][:yearly][:median_price]) %></strong>
+                        </p>
+                        <% if @analysis[:billing_cycle_analysis][:yearly][:monthly_equivalent] %>
+                          <p class="mb-0 small">
+                            Monthly equiv: <strong><%= number_to_currency(@analysis[:billing_cycle_analysis][:yearly][:monthly_equivalent]) %></strong>
+                          </p>
+                        <% end %>
+                      <% else %>
+                        <p class="text-muted small">No data available</p>
+                      <% end %>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="row mb-4">
+          <div class="col-12">
+            <div class="alert alert-info">
+              <i class="bi bi-info-circle"></i>
+              <strong>No Comparison Data Available</strong><br>
+              You're the only user with this subscription in our system. Market analysis will improve as more users add this service.
+            </div>
+          </div>
+        </div>
+      <% end %>
+
+      <!-- Savings Opportunities -->
+      <% if @analysis[:savings_opportunities].any? %>
+        <div class="row mb-4">
+          <div class="col-12">
+            <div class="card border-success">
+              <div class="card-body">
+                <h3 class="h5 mb-3 text-success">
+                  <i class="bi bi-piggy-bank"></i> Savings Opportunities
+                </h3>
+                <% @analysis[:savings_opportunities].each do |opportunity| %>
+                  <div class="alert alert-success">
+                    <div class="d-flex justify-content-between align-items-start">
+                      <div>
+                        <h4 class="h6 mb-1"><%= opportunity[:description] %></h4>
+                        <p class="mb-0"><%= opportunity[:details] %></p>
+                      </div>
+                      <div class="text-end">
+                        <strong class="text-success fs-5">
+                          Save $<%= opportunity[:potential_savings].round(2) %>/year
+                        </strong>
+                      </div>
+                    </div>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+
+      <!-- Category Insights -->
+      <% if @analysis[:category_insights][:total_users] && @analysis[:category_insights][:total_users] > 0 %>
+        <div class="row mb-4">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-body">
+                <h3 class="h5 mb-3">
+                  <i class="bi bi-tags text-secondary"></i> 
+                  Category Insights: <%= @analysis[:category_insights][:category_name] %>
+                </h3>
+                <div class="row">
+                  <div class="col-md-6">
+                    <p class="mb-2">
+                      <strong><%= @analysis[:category_insights][:total_users] %></strong> users in this category
+                    </p>
+                    <p class="mb-2">
+                      Average monthly spend: <strong><%= number_to_currency(@analysis[:category_insights][:average_monthly_spend]) %></strong>
+                    </p>
+                    <p class="mb-0">
+                      Average yearly spend: <strong><%= number_to_currency(@analysis[:category_insights][:average_yearly_spend]) %></strong>
+                    </p>
+                  </div>
+                  <div class="col-md-6">
+                    <p class="mb-2">
+                      Your total in this category: <strong><%= number_to_currency(@analysis[:category_insights][:user_category_total]) %>/year</strong>
+                    </p>
+                    <% if @analysis[:category_insights][:popular_services].any? %>
+                      <p class="mb-1"><strong>Popular services:</strong></p>
+                      <% @analysis[:category_insights][:popular_services].each do |service, count| %>
+                        <span class="badge bg-light text-dark me-1 mb-1">
+                          <%= service %> (<%= count %> users)
+                        </span>
+                      <% end %>
+                    <% end %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+
+      <!-- Alternative Suggestions -->
+      <% if @analysis[:alternative_suggestions].any? %>
+        <div class="row mb-4">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-body">
+                <h3 class="h5 mb-3">
+                  <i class="bi bi-lightbulb text-warning"></i> Alternative Services
+                </h3>
+                <p class="text-muted mb-3">Other popular services in the same category:</p>
+                <div class="row">
+                  <% @analysis[:alternative_suggestions].each do |alt| %>
+                    <div class="col-md-4 mb-3">
+                      <div class="card h-100">
+                        <div class="card-body">
+                          <h4 class="h6 card-title"><%= alt[:name] %></h4>
+                          <p class="card-text">
+                            <small class="text-muted"><%= alt[:user_count] %> users</small><br>
+                            Average: <strong><%= number_to_currency(alt[:average_price]) %></strong><br>
+                            <% alt[:billing_cycles].each do |cycle| %>
+                              <span class="badge bg-secondary"><%= cycle %></span>
+                            <% end %>
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+
+      <!-- Footer -->
+      <div class="row">
+        <div class="col-12">
+          <div class="alert alert-light">
+            <small class="text-muted">
+              <i class="bi bi-shield-check"></i>
+              <strong>Privacy Note:</strong> This analysis is based on anonymized data from other users. 
+              No personal information is shared or visible to other users.
+            </small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .progress-bar {
+    transition: width 0.6s ease;
+  }
+  
+  .card {
+    transition: box-shadow 0.15s ease-in-out;
+  }
+  
+  .card:hover {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+  }
+</style>
