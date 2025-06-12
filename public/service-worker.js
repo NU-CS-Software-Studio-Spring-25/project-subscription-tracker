@@ -47,10 +47,21 @@ self.addEventListener('activate', e => {
   e.waitUntil(self.clients.claim());
 });
 
-self.addEventListener('fetch', e => {
-  e.respondWith(
-    caches.match(e.request)
-      .then(cached => cached || fetch(e.request))
+self.addEventListener('fetch', event => {
+  const url = event.request.url;
+  if (url.startsWith('https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js')) {
+    event.respondWith(
+      caches.match(event.request)
+        .then(cached => cached || fetch(event.request).then(networkRes => {
+          caches.open(CACHE_NAME).then(cache => cache.put(event.request, networkRes.clone()));
+          return networkRes;
+        }))
+    );
+    return;
+  }
+  event.respondWith(
+    caches.match(event.request)
+      .then(cached => cached || fetch(event.request))
   );
-});
+});;
 
