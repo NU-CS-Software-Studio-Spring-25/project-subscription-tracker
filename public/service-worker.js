@@ -59,9 +59,27 @@ self.addEventListener('fetch', event => {
     );
     return;
   }
+
+  if (url.startsWith('https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css')) {
+    event.respondWith(
+      caches.match(event.request)
+        .then(cached => cached || fetchAndCache(event.request))
+    );
+    return;
+  }
+
   event.respondWith(
     caches.match(event.request)
       .then(cached => cached || fetch(event.request))
   );
 });;
 
+// helper to fetch & put in cache
+async function fetchAndCache(request) {
+  const networkRes = await fetch(request);
+  if (networkRes.ok) {
+    const cache = await caches.open(CACHE_NAME);
+    cache.put(request, networkRes.clone());
+  }
+  return networkRes;
+}
