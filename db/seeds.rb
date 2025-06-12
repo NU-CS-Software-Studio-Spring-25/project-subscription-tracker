@@ -1,12 +1,30 @@
 # This file should contain all the record creation needed to seed the database with its default values.
 
+# Helper methods to reduce repetition
+def create_user_with_defaults(email, password = "password")
+  user = User.find_by(email: email)
+  if user
+    puts "User #{email} already exists"
+    return user
+  end
+  
+  user = User.create!(email: email, password: password, password_confirmation: password)
+  puts "Created user: #{email}"
+  user
+end
+
+def create_subscription_with_defaults(base_attrs)
+  defaults = {
+    billing_cycle: 'Monthly',
+    notes: '',
+    notification_days_before: 7
+  }
+  defaults.merge(base_attrs)
+end
+
 # Ensure the default user exists, creating them if necessary
 default_user_email = "default@example.com"
-user = User.find_or_create_by!(email: default_user_email) do |u|
-  u.password = "password" # You can set a default password here
-  u.password_confirmation = "password"
-  puts "Created default user: #{default_user_email}"
-end
+user = create_user_with_defaults(default_user_email)
 puts "Using user: #{user.email} (ID: #{user.id}) for seeding subscriptions."
 
 # Clear out old data carefully
@@ -23,88 +41,228 @@ Category.destroy_all
 
 # --- Recreate Categories ---
 puts "Creating categories..."
-other = Category.create!(name: "Other")
-entertainment = Category.create!(name: "Entertainment")
-housing = Category.create!(name: "Housing")
-utilities = Category.create!(name: "Utilities")
-streaming = Category.create!(name: "Streaming Services")
-food_delivery = Category.create!(name: "Food Delivery")
-news_magazines = Category.create!(name: "News & Magazines")
-software = Category.create!(name: "Software")
-fitness = Category.create!(name: "Fitness")
-education = Category.create!(name: "Education")
-travel = Category.create!(name: "Travel")
-health = Category.create!(name: "Health & Wellness")
+categories_data = [
+  "Other", "Entertainment", "Housing", "Utilities", "Streaming Services",
+  "Food Delivery", "News & Magazines", "Software", "Fitness", 
+  "Education", "Travel", "Health & Wellness"
+]
+
+# Create categories and store references
+categories = {}
+categories_data.each do |category_name|
+  categories[category_name.downcase.gsub(/[^a-z]/, '_').to_sym] = Category.create!(name: category_name)
+end
+
+# Extract category references for easier access
+other = categories[:other]
+entertainment = categories[:entertainment]
+housing = categories[:housing]
+utilities = categories[:utilities]
+streaming = categories[:streaming_services]
+food_delivery = categories[:food_delivery]
+news_magazines = categories[:news___magazines]
+software = categories[:software]
+fitness = categories[:fitness]
+education = categories[:education]
+travel = categories[:travel]
+health = categories[:health___wellness]
+
 puts "#{Category.count} categories created."
 
 # --- Add Subscriptions for the default user ---
 puts "Creating subscriptions for user: #{user.email}..."
-add_subscriptions = [
+
+# Define subscription data with more concise structure
+subscription_data = [
   # Streaming Services
-  { name: 'Netflix Standard Plan',      price: 15.99, billing_cycle: 'Monthly', next_payment_date: Date.parse('2025-06-15'), notes: '', category: streaming, notification_days_before: 7 },
-  { name: 'Hulu Basic',                 price: 7.99,  billing_cycle: 'Monthly', next_payment_date: Date.parse('2025-06-20'), notes: '', category: streaming, notification_days_before: 7 },
-  { name: 'Disney+ Subscription',       price: 7.99,  billing_cycle: 'Monthly', next_payment_date: Date.parse('2025-06-10'), notes: '', category: streaming, notification_days_before: 7 },
-  { name: 'Spotify Premium',            price: 9.99,  billing_cycle: 'Monthly', next_payment_date: Date.parse('2025-06-18'), notes: '', category: streaming, notification_days_before: 7 },
+  ['Netflix Standard Plan', 15.99, 'Monthly', '2025-06-15', streaming],
+  ['Hulu Basic', 7.99, 'Monthly', '2025-06-20', streaming],
+  ['Disney+ Subscription', 7.99, 'Monthly', '2025-06-10', streaming],
+  ['Spotify Premium', 9.99, 'Monthly', '2025-06-18', streaming],
 
   # Utilities
-  { name: 'Xfinity Internet',           price: 59.99, billing_cycle: 'Monthly', next_payment_date: Date.parse('2025-06-05'), notes: '', category: utilities, notification_days_before: 7 },
-  { name: 'Verizon Wireless',           price: 39.99, billing_cycle: 'Monthly', next_payment_date: Date.parse('2025-06-12'), notes: '', category: utilities, notification_days_before: 7 },
-  { name: 'City Water Utility',         price: 25.00, billing_cycle: 'Monthly', next_payment_date: Date.parse('2025-06-08'), notes: '', category: utilities, notification_days_before: 7 },
-  { name: 'Gas Company Service',        price: 30.00, billing_cycle: 'Monthly', next_payment_date: Date.parse('2025-06-09'), notes: '', category: utilities, notification_days_before: 7 },
+  ['Xfinity Internet', 59.99, 'Monthly', '2025-06-05', utilities],
+  ['Verizon Wireless', 39.99, 'Monthly', '2025-06-12', utilities],
+  ['City Water Utility', 25.00, 'Monthly', '2025-06-08', utilities],
+  ['Gas Company Service', 30.00, 'Monthly', '2025-06-09', utilities],
 
   # Food Delivery
-  { name: 'Uber Eats Plus',             price: 9.99,  billing_cycle: 'Monthly', next_payment_date: Date.parse('2025-06-14'), notes: '', category: food_delivery, notification_days_before: 7 },
-  { name: 'DoorDash DashPass',          price: 9.99,  billing_cycle: 'Monthly', next_payment_date: Date.parse('2025-06-11'), notes: '', category: food_delivery, notification_days_before: 7 },
-  { name: 'Grubhub+',                   price: 9.99,  billing_cycle: 'Monthly', next_payment_date: Date.parse('2025-06-13'), notes: '', category: food_delivery, notification_days_before: 7 },
-  { name: 'Postmates Unlimited',        price: 9.99,  billing_cycle: 'Monthly', next_payment_date: Date.parse('2025-06-16'), notes: '', category: food_delivery, notification_days_before: 7 },
+  ['Uber Eats Plus', 9.99, 'Monthly', '2025-06-14', food_delivery],
+  ['DoorDash DashPass', 9.99, 'Monthly', '2025-06-11', food_delivery],
+  ['Grubhub+', 9.99, 'Monthly', '2025-06-13', food_delivery],
+  ['Postmates Unlimited', 9.99, 'Monthly', '2025-06-16', food_delivery],
 
   # News & Magazines
-  { name: 'New York Times Digital',     price: 17.00, billing_cycle: 'Monthly', next_payment_date: Date.parse('2025-06-02'), notes: '', category: news_magazines, notification_days_before: 7 },
-  { name: 'Wall Street Journal',        price: 22.00, billing_cycle: 'Monthly', next_payment_date: Date.parse('2025-06-03'), notes: '', category: news_magazines, notification_days_before: 7 },
-  { name: 'Wired Magazine',             price: 12.00, billing_cycle: 'Monthly', next_payment_date: Date.parse('2025-06-04'), notes: '', category: news_magazines, notification_days_before: 7 },
-  { name: 'Medium Membership',          price: 5.00,  billing_cycle: 'Monthly', next_payment_date: Date.parse('2025-06-06'), notes: '', category: news_magazines, notification_days_before: 7 },
+  ['New York Times Digital', 17.00, 'Monthly', '2025-06-02', news_magazines],
+  ['Wall Street Journal', 22.00, 'Monthly', '2025-06-03', news_magazines],
+  ['Wired Magazine', 12.00, 'Monthly', '2025-06-04', news_magazines],
+  ['Medium Membership', 5.00, 'Monthly', '2025-06-06', news_magazines],
 
   # Software
-  { name: 'Microsoft 365 Personal',     price: 69.99, billing_cycle: 'Yearly',  next_payment_date: Date.parse('2026-05-13'), notes: '', category: software, notification_days_before: 7 },
-  { name: 'Adobe Creative Cloud',       price: 52.99, billing_cycle: 'Monthly', next_payment_date: Date.parse('2025-06-07'), notes: '', category: software, notification_days_before: 7 },
-  { name: 'JetBrains All Products Pack',price: 249.00,billing_cycle: 'Yearly',  next_payment_date: Date.parse('2026-05-13'), notes: '', category: software, notification_days_before: 7 },
-  { name: 'Zoom Pro',                   price: 14.99, billing_cycle: 'Monthly', next_payment_date: Date.parse('2025-06-17'), notes: '', category: software, notification_days_before: 7 },
+  ['Microsoft 365 Personal', 69.99, 'Yearly', '2026-05-13', software],
+  ['Adobe Creative Cloud', 52.99, 'Monthly', '2025-06-07', software],
+  ['JetBrains All Products Pack', 249.00, 'Yearly', '2026-05-13', software],
+  ['Zoom Pro', 14.99, 'Monthly', '2025-06-17', software],
 
   # Fitness
-  { name: 'Peloton App',                price: 12.99, billing_cycle: 'Monthly', next_payment_date: Date.parse('2025-06-19'), notes: '', category: fitness, notification_days_before: 7 },
-  { name: 'ClassPass',                  price: 45.00, billing_cycle: 'Monthly', next_payment_date: Date.parse('2025-06-20'), notes: '', category: fitness, notification_days_before: 7 },
-  { name: 'Local Gym Membership',       price: 29.99, billing_cycle: 'Monthly', next_payment_date: Date.parse('2025-06-21'), notes: '', category: fitness, notification_days_before: 7 },
-  { name: 'Strava Summit',              price: 7.99,  billing_cycle: 'Monthly', next_payment_date: Date.parse('2025-06-22'), notes: '', category: fitness, notification_days_before: 7 },
+  ['Peloton App', 12.99, 'Monthly', '2025-06-19', fitness],
+  ['ClassPass', 45.00, 'Monthly', '2025-06-20', fitness],
+  ['Local Gym Membership', 29.99, 'Monthly', '2025-06-21', fitness],
+  ['Strava Summit', 7.99, 'Monthly', '2025-06-22', fitness],
 
   # Education
-  { name: 'Coursera Plus',              price: 49.00, billing_cycle: 'Monthly', next_payment_date: Date.parse('2025-06-15'), notes: '', category: education, notification_days_before: 7 },
-  { name: 'LinkedIn Learning',          price: 29.99, billing_cycle: 'Monthly', next_payment_date: Date.parse('2025-06-16'), notes: '', category: education, notification_days_before: 7 },
-  { name: 'Skillshare Premium',         price: 19.00, billing_cycle: 'Monthly', next_payment_date: Date.parse('2025-06-17'), notes: '', category: education, notification_days_before: 7 },
-  { name: 'MasterClass Subscription',   price: 15.00, billing_cycle: 'Monthly', next_payment_date: Date.parse('2025-06-18'), notes: '', category: education, notification_days_before: 7 },
+  ['Coursera Plus', 49.00, 'Monthly', '2025-06-15', education],
+  ['LinkedIn Learning', 29.99, 'Monthly', '2025-06-16', education],
+  ['Skillshare Premium', 19.00, 'Monthly', '2025-06-17', education],
+  ['MasterClass Subscription', 15.00, 'Monthly', '2025-06-18', education],
 
   # Travel
-  { name: 'AAA Membership',             price: 59.00, billing_cycle: 'Yearly',  next_payment_date: Date.parse('2026-05-13'), notes: '', category: travel, notification_days_before: 7 },
-  { name: 'Priority Pass',              price: 99.00, billing_cycle: 'Yearly',  next_payment_date: Date.parse('2026-05-13'), notes: '', category: travel, notification_days_before: 7 },
-  { name: 'SpotHero Premium',           price: 5.99,  billing_cycle: 'Monthly', next_payment_date: Date.parse('2025-06-10'), notes: '', category: travel, notification_days_before: 7 },
-  { name: 'Travelzoo Premium',          price: 14.99, billing_cycle: 'Monthly', next_payment_date: Date.parse('2025-06-11'), notes: '', category: travel, notification_days_before: 7 },
+  ['AAA Membership', 59.00, 'Yearly', '2026-05-13', travel],
+  ['Priority Pass', 99.00, 'Yearly', '2026-05-13', travel],
+  ['SpotHero Premium', 5.99, 'Monthly', '2025-06-10', travel],
+  ['Travelzoo Premium', 14.99, 'Monthly', '2025-06-11', travel],
 
   # Entertainment
-  { name: 'Cinemark Movie Club',        price: 8.99,  billing_cycle: 'Monthly', next_payment_date: Date.parse('2025-06-12'), notes: '', category: entertainment, notification_days_before: 7 },
-  { name: 'Audible Membership',         price: 14.95, billing_cycle: 'Monthly', next_payment_date: Date.parse('2025-06-13'), notes: '', category: entertainment, notification_days_before: 7 },
-  { name: 'PlayStation Plus',           price: 9.99,  billing_cycle: 'Monthly', next_payment_date: Date.parse('2025-06-14'), notes: '', category: entertainment, notification_days_before: 7 },
-  { name: 'Xbox Game Pass',             price: 9.99,  billing_cycle: 'Monthly', next_payment_date: Date.parse('2025-06-15'), notes: '', category: entertainment, notification_days_before: 7 },
+  ['Cinemark Movie Club', 8.99, 'Monthly', '2025-06-12', entertainment],
+  ['Audible Membership', 14.95, 'Monthly', '2025-06-13', entertainment],
+  ['PlayStation Plus', 9.99, 'Monthly', '2025-06-14', entertainment],
+  ['Xbox Game Pass', 9.99, 'Monthly', '2025-06-15', entertainment],
 
   # Health & Wellness
-  { name: 'Headspace',                  price: 12.99, billing_cycle: 'Monthly', next_payment_date: Date.parse('2025-06-16'), notes: '', category: health, notification_days_before: 7 },
-  { name: 'Calm',                       price: 14.99, billing_cycle: 'Monthly', next_payment_date: Date.parse('2025-06-17'), notes: '', category: health, notification_days_before: 7 },
-  { name: 'Fitbit Premium',             price: 9.99,  billing_cycle: 'Monthly', next_payment_date: Date.parse('2025-06-18'), notes: '', category: health, notification_days_before: 7 },
-  { name: 'Noom',                       price: 59.00, billing_cycle: 'Monthly', next_payment_date: Date.parse('2025-06-19'), notes: '', category: health, notification_days_before: 7 }
+  ['Headspace', 12.99, 'Monthly', '2025-06-16', health],
+  ['Calm', 14.99, 'Monthly', '2025-06-17', health],
+  ['Fitbit Premium', 9.99, 'Monthly', '2025-06-18', health],
+  ['Noom', 59.00, 'Monthly', '2025-06-19', health]
 ]
 
-add_subscriptions.each do |subscription_attrs|
-  
-  # Ensure the user_id is set correctly when creating subscriptions
+# Create subscriptions using the helper method
+subscription_data.each do |name, price, billing_cycle, payment_date, category|
+  subscription_attrs = create_subscription_with_defaults({
+    name: name,
+    price: price,
+    billing_cycle: billing_cycle,
+    next_payment_date: Date.parse(payment_date),
+    category: category
+  })
   user.subscriptions.create!(subscription_attrs)
 end
 
 puts "Seeded #{user.subscriptions.count} subscriptions for #{user.email}"
+
+# Create additional users for market analysis data
+puts "Creating additional users for market analysis..."
+
+# Clear existing users except default user first
+puts "Clearing existing additional users..."
+User.where.not(email: default_user_email).destroy_all
+
+# Use helper method to create additional users
+additional_user_emails = [
+  "Alrasheed@SubConscious.nu", 
+  "Jacob@SubConscious.nu", 
+  "Kurdia@SubConscious.nu", 
+  "Mukhtar@SubConscious.nu", 
+  "Sofian@SubConscious.nu"
+]
+
+additional_user_emails.each do |email|
+  create_user_with_defaults(email)
+end
+
+# Helper method for creating sample subscriptions with variations
+def create_sample_subscriptions_for_market_analysis(users, default_user_email, base_date, categories)
+  sample_subscriptions = [
+    # Streaming Services (6 services with 5 users each = 30 subscriptions)
+    { name: 'Netflix Standard Plan', prices: [15.99, 14.99, 15.99, 16.99, 15.49], category: :streaming, billing_cycle: 'Monthly' },
+    { name: 'Hulu Basic', prices: [7.99, 8.99, 6.99, 8.49, 7.49], category: :streaming, billing_cycle: 'Monthly' },
+    { name: 'Disney+ Subscription', prices: [7.99, 8.99, 9.99, 7.49, 8.49], category: :streaming, billing_cycle: 'Monthly' },
+    { name: 'HBO Max', prices: [14.99, 15.99, 16.99, 14.49, 15.49], category: :streaming, billing_cycle: 'Monthly' },
+    { name: 'Amazon Prime Video', prices: [8.99, 9.99, 8.49, 9.49, 8.99], category: :streaming, billing_cycle: 'Monthly' },
+    { name: 'Apple TV+', prices: [6.99, 7.99, 6.49, 7.49, 6.99], category: :streaming, billing_cycle: 'Monthly' },
+    
+    # Software (4 services with 5 users each = 20 subscriptions)
+    { name: 'Adobe Creative Cloud', prices: [52.99, 49.99, 54.99, 59.99, 51.99], category: :software, billing_cycle: 'Monthly' },
+    { name: 'Microsoft 365 Personal', prices: [6.99, 7.99, 6.49, 7.49, 6.99], category: :software, billing_cycle: 'Monthly' },
+    { name: 'Canva Pro', prices: [12.99, 14.99, 11.99, 13.99, 12.49], category: :software, billing_cycle: 'Monthly' },
+    { name: 'Figma Professional', prices: [12.00, 15.00, 10.00, 14.00, 13.00], category: :software, billing_cycle: 'Monthly' },
+    
+    # Fitness (3 services with 5 users each = 15 subscriptions)
+    { name: 'Local Gym Membership', prices: [29.99, 39.99, 24.99, 34.99, 45.99], category: :fitness, billing_cycle: 'Monthly' },
+    { name: 'Peloton App', prices: [12.99, 14.99, 11.99, 13.99, 12.49], category: :fitness, billing_cycle: 'Monthly' },
+    { name: 'MyFitnessPal Premium', prices: [9.99, 11.99, 8.99, 10.99, 9.49], category: :fitness, billing_cycle: 'Monthly' },
+    
+    # Food Delivery (3 services with 5 users each = 15 subscriptions)
+    { name: 'DoorDash DashPass', prices: [9.99, 12.99, 8.99, 11.99, 10.49], category: :food_delivery, billing_cycle: 'Monthly' },
+    { name: 'Uber Eats Plus', prices: [9.99, 11.99, 7.99, 10.99, 9.49], category: :food_delivery, billing_cycle: 'Monthly' },
+    { name: 'Grubhub+', prices: [9.99, 10.99, 8.99, 11.49, 9.99], category: :food_delivery, billing_cycle: 'Monthly' },
+    
+    # News & Magazines (3 services with 5 users each = 15 subscriptions)
+    { name: 'New York Times Digital', prices: [17.00, 15.00, 19.99, 21.00, 16.99], category: :news_magazines, billing_cycle: 'Monthly' },
+    { name: 'Wall Street Journal', prices: [22.00, 19.99, 24.99, 20.99, 23.49], category: :news_magazines, billing_cycle: 'Monthly' },
+    { name: 'The Atlantic', prices: [7.99, 8.99, 6.99, 8.49, 7.49], category: :news_magazines, billing_cycle: 'Monthly' },
+    
+    # Health & Wellness (3 services with 5 users each = 15 subscriptions)
+    { name: 'Headspace', prices: [12.99, 14.99, 11.99, 13.99, 12.49], category: :health, billing_cycle: 'Monthly' },
+    { name: 'Calm', prices: [14.99, 16.99, 12.99, 15.99, 14.49], category: :health, billing_cycle: 'Monthly' },
+    { name: 'BetterHelp', prices: [65.00, 70.00, 60.00, 75.00, 68.00], category: :health, billing_cycle: 'Monthly' },
+    
+    # Education (3 services with 5 users each = 15 subscriptions)
+    { name: 'Coursera Plus', prices: [49.00, 59.00, 39.00, 54.00, 44.00], category: :education, billing_cycle: 'Monthly' },
+    { name: 'LinkedIn Learning', prices: [29.99, 34.99, 24.99, 32.99, 27.99], category: :education, billing_cycle: 'Monthly' },
+    { name: 'Skillshare Premium', prices: [19.00, 22.00, 16.00, 20.00, 18.00], category: :education, billing_cycle: 'Monthly' },
+    
+    # Entertainment (2 services with 5 users each = 10 subscriptions)
+    { name: 'Audible Plus', prices: [14.95, 16.95, 12.95, 15.95, 14.45], category: :entertainment, billing_cycle: 'Monthly' },
+    { name: 'Spotify Premium', prices: [9.99, 10.99, 9.49, 11.99, 9.99], category: :entertainment, billing_cycle: 'Monthly' },
+    
+    # Utilities (2 services with 5 users each = 10 subscriptions)
+    { name: 'VPN Service', prices: [11.99, 9.99, 12.99, 10.99, 11.49], category: :utilities, billing_cycle: 'Monthly' },
+    { name: 'Cloud Storage', prices: [9.99, 11.99, 8.99, 10.99, 9.49], category: :utilities, billing_cycle: 'Monthly' }
+  ]  # Map category symbols to actual category objects
+  category_map = {
+    streaming: categories[:streaming_services],
+    software: categories[:software],
+    fitness: categories[:fitness],
+    food_delivery: categories[:food_delivery],
+    news_magazines: categories[:news___magazines],
+    health: categories[:health___wellness],
+    education: categories[:education],
+    entertainment: categories[:entertainment],
+    utilities: categories[:utilities]
+  }
+
+  sample_subscriptions.each do |sub_data|
+    sub_data[:prices].each_with_index do |price, index|
+      next if index >= users.count # Skip if we don't have enough users
+      
+      user = users[index]
+      next if user.email == default_user_email # Skip default user to avoid duplicates
+      
+      subscription_attrs = create_subscription_with_defaults({
+        name: sub_data[:name],
+        price: price,
+        billing_cycle: sub_data[:billing_cycle],
+        category: category_map[sub_data[:category]],
+        next_payment_date: base_date + rand(1..30).days,
+        notification_days_before: [3, 5, 7, 10].sample,
+        notes: "Sample data for market analysis"
+      })
+      
+      user.subscriptions.create!(subscription_attrs)
+    end
+  end
+end
+
+# Create diverse subscription data for market analysis
+users = User.all
+base_date = Date.parse('2025-06-15')
+
+# Use the helper method to create sample subscriptions
+create_sample_subscriptions_for_market_analysis(users, default_user_email, base_date, categories)
+
+total_subscriptions = Subscription.count
+total_users = User.count
+puts "Market analysis data seeded successfully!"
+puts "Total users: #{total_users}"
+puts "Total subscriptions: #{total_subscriptions}"
+puts "Ready for market analysis testing."
