@@ -1,7 +1,10 @@
 class PagesController < ApplicationController
   def landing
     # Redirect authenticated users to their dashboard
-    redirect_to subscriptions_summary_path if user_signed_in?
+    if user_signed_in?
+      redirect_to summary_subscriptions_path
+      return
+    end
     
     render layout: 'application'
   end
