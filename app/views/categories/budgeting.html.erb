@@ -35,11 +35,20 @@
                 <div class="col-md-3">
                   <%= form_with url: update_budget_category_path(category), method: :patch, local: true, class: "d-flex align-items-center" do |form| %>
                     <div class="input-group input-group-sm">
-                      <%= form.number_field :amount, value: budget_amount, min: 0, class: "form-control", placeholder: "#{@period.capitalize} budget", "aria-label": "Budget amount for #{category.name}" %>
+                      <%= form.number_field :amount, 
+                          value: budget_amount, 
+                          min: 0.01, 
+                          max: 999999.99,
+                          step: 0.01,
+                          class: "form-control", 
+                          placeholder: "#{@period.capitalize} budget", 
+                          "aria-label": "Budget amount for #{category.name}",
+                          required: true %>
                       <button class="btn btn-outline-secondary" type="submit" aria-label="Update budget for <%= category.name %>">Update</button>
                     </div>
                     <%= form.hidden_field :target_period, value: @period %>
                   <% end %>
+                  <small class="form-text text-muted">$0.01 - $999,999.99</small>
                 </div>
                 <div class="col-md-3">
                   <span class="fw-bold">

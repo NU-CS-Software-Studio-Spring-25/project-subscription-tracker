@@ -69,11 +69,30 @@ class CategoriesController < ApplicationController
   def update_budget
     @category = Category.find(params[:id])
     target_period = params[:target_period] || 'monthly'
-    amount = params[:amount].to_f
+    amount = params[:amount]
     
-    # Handle empty or zero amounts
-    if amount <= 0
+    # Validate amount parameter
+    if amount.blank?
+      redirect_to budgeting_categories_path(period: target_period), alert: "Budget amount is required."
+      return
+    end
+    
+    # Convert to float and validate
+    begin
+      amount_value = Float(amount)
+    rescue ArgumentError
+      redirect_to budgeting_categories_path(period: target_period), alert: "Budget amount must be a valid number."
+      return
+    end
+    
+    # Check range
+    if amount_value <= 0
       redirect_to budgeting_categories_path(period: target_period), alert: "Budget amount must be greater than 0."
+      return
+    end
+    
+    if amount_value > 999999.99
+      redirect_to budgeting_categories_path(period: target_period), alert: "Budget amount cannot exceed $999,999.99."
       return
     end
     
@@ -82,15 +101,15 @@ class CategoriesController < ApplicationController
       target_period: target_period
     )
     
-    if @budget.update(amount: amount)
+    if @budget.update(amount: amount_value)
       # Check if this update puts the category over budget
       billing_cycle = target_period == 'yearly' ? 'Yearly' : 'Monthly'
       actual_spent = @category.subscriptions
         .where(user: current_user, billing_cycle: billing_cycle)
         .sum(:price)
       
-      if actual_spent > amount
-        flash[:warning] = "⚠️ #{@category.name} is over budget! Spending: #{number_to_currency(actual_spent)}, Budget: #{number_to_currency(amount)}"
+      if actual_spent > amount_value
+        flash[:warning] = "⚠️ #{@category.name} is over budget! Spending: #{number_to_currency(actual_spent)}, Budget: #{number_to_currency(amount_value)}"
       else
         flash[:notice] = "#{target_period.capitalize} budget updated successfully!"
       end
