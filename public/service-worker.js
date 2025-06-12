@@ -59,7 +59,6 @@ self.addEventListener('fetch', event => {
     );
     return;
   }
-  // ← Then your normal cache‐first logic:
   event.respondWith(
     caches.match(event.request)
       .then(cached => cached || fetch(event.request))
