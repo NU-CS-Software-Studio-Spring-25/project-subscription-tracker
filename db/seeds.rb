@@ -60,12 +60,12 @@ housing = categories[:housing]
 utilities = categories[:utilities]
 streaming = categories[:streaming_services]
 food_delivery = categories[:food_delivery]
-news_magazines = categories[:news_and_magazines]
+news_magazines = categories[:news_magazines]
 software = categories[:software]
 fitness = categories[:fitness]
 education = categories[:education]
 travel = categories[:travel]
-health = categories[:health_and_wellness]
+health = categories[:health_wellness]
 
 puts "#{Category.count} categories created."
 
@@ -214,18 +214,19 @@ def create_sample_subscriptions_for_market_analysis(users, default_user_email, b
     # Entertainment (2 services with 5 users each = 10 subscriptions)
     { name: 'Audible Plus', prices: [14.95, 16.95, 12.95, 15.95, 14.45], category: :entertainment, billing_cycle: 'Monthly' },
     { name: 'Spotify Premium', prices: [9.99, 10.99, 9.49, 11.99, 9.99], category: :entertainment, billing_cycle: 'Monthly' },
-    
-    # Utilities (2 services with 5 users each = 10 subscriptions)
+      # Utilities (2 services with 5 users each = 10 subscriptions)
     { name: 'VPN Service', prices: [11.99, 9.99, 12.99, 10.99, 11.49], category: :utilities, billing_cycle: 'Monthly' },
     { name: 'Cloud Storage', prices: [9.99, 11.99, 8.99, 10.99, 9.49], category: :utilities, billing_cycle: 'Monthly' }
-  ]  # Map category symbols to actual category objects
+  ]
+  
+  # Map category symbols to actual category objects
   category_map = {
     streaming: categories[:streaming_services],
     software: categories[:software],
     fitness: categories[:fitness],
     food_delivery: categories[:food_delivery],
-    news_magazines: categories[:news_and_magazines],
-    health: categories[:health_and_wellness],
+    news_magazines: categories[:news_magazines],
+    health: categories[:health_wellness],
     education: categories[:education],
     entertainment: categories[:entertainment],
     utilities: categories[:utilities]
